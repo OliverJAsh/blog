@@ -4,6 +4,8 @@
 
 ```
 npm install
+./node_modules/.bin/jspm install
+npm run build
 npm start
 ```
 
