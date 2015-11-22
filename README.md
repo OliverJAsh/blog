@@ -14,6 +14,11 @@ npm run build
 npm run watch
 ```
 
+### Lint
+```
+./node_modules/.bin/eslint .
+```
+
 ## TODO
 
 * TypeScript?
