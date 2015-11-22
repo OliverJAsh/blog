@@ -22,4 +22,3 @@ npm run watch
 ## TODO
 
 * TypeScript?
-* Remove JSX
