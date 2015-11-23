@@ -8,6 +8,8 @@ import homeView from './shared/views/home';
 import postView from './shared/views/post';
 import mainView from './shared/views/main';
 
+import { getAssetFilename } from './shared/helpers';
+
 const posts = [
     { id: 'my-first-article', title: 'My First Article', body: '<p>Hello, World!</p>', date: new Date(2015, 0, 1) },
     { id: 'my-second-article', title: 'My Second Article', body: '<p>Goodbye, World!</p>', date: new Date(2015, 0, 2) }
@@ -75,6 +77,10 @@ siteRouter.get('/shell', (req, res, next) => (
     mainView()
         .then(node => res.send(treeToHTML(node)))
         .catch(next)
+));
+
+siteRouter.get('/shell-manifest.json', (req, res) => (
+    res.send([ '/shell', getAssetFilename('main-bundle.js') ])
 ));
 
 siteRouter.use((req, res, next) => (

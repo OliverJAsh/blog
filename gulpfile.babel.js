@@ -5,6 +5,7 @@ import uglify from 'gulp-uglify';
 import sourcemaps from 'gulp-sourcemaps';
 import jspm from 'jspm';
 import jspmBuild from 'gulp-jspm-build';
+import rev from 'gulp-rev';
 
 //
 // Build
@@ -26,6 +27,9 @@ gulp.task('build-app', () => (
         bundleOptions: { minify: true, sourceMaps: true, sourceMapContents: true },
         bundles: [ { src: 'main', dst: 'main-bundle.js' } ]
     })
+        .pipe(rev())
+        .pipe(gulp.dest('./public/js'))
+        .pipe(rev.manifest())
         .pipe(gulp.dest('./public/js'))
 ));
 

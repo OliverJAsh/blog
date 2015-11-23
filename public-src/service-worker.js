@@ -9,17 +9,51 @@ const expectedCaches = [
     contentCacheName
 ];
 
+const map = (collection, mapFn) => (
+    Object.keys(collection).map(key => mapFn(collection[key], key))
+);
+const reduce = (collection, reduceFn, seed) => (
+    Object.keys(collection).reduce((acc, key) => {
+        const value = collection[key];
+        return reduceFn(acc, value, key);
+    }, seed)
+);
+const mapKeys = (collection, mapFn) => (
+    reduce(collection, (acc, value, key) => {
+        acc[mapFn(value, key)] = value;
+        return acc;
+    }, {})
+);
+
+const fetchAll = inputs => Promise.all(inputs.map(input => fetch(input)));
+
+const addResponsesToCache = (cacheName, requestUrlToResponseMap) => (
+    caches.open(cacheName).then((cache) => (
+        map(requestUrlToResponseMap, (response, request) => cache.put(new Request(request), response))
+    ))
+);
+
+const updateCache = () => (
+    fetch('/shell-manifest.json').then(jsonResponse => {
+        if (jsonResponse.ok) {
+            return jsonResponse.clone().json().then(assetUrls => (
+                fetchAll(assetUrls).then(assetResponses => {
+                    const allAssetResponsesOk = assetResponses.every(response => response.ok);
+
+                    if (allAssetResponsesOk) {
+                        const assetRequestUrlToResponseMap = mapKeys(assetResponses, (response, index) => assetUrls[index]);
+                        return addResponsesToCache(staticCacheName, assetRequestUrlToResponseMap);
+                    }
+                })
+            ));
+        }
+    })
+);
+
 self.addEventListener('install', (event) => {
     console.log('Install');
     // Cache the shell
-    event.waitUntil(
-        caches.open(staticCacheName).then((cache) => (
-            cache.addAll([
-                '/shell',
-                '/js/main-bundle.js'
-            ])
-        ))
-    );
+    event.waitUntil(updateCache());
 });
 
 self.addEventListener('activate', (event) => {
