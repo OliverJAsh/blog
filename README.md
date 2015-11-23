@@ -24,3 +24,4 @@ npm run watch
 ## TODO
 
 * TypeScript?
+* Clean out or serve old JS files?
