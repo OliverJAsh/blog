@@ -2,10 +2,10 @@
   "name": "blog",
   "private": true,
   "scripts": {
-    "start": "./node_modules/.bin/babel-node .",
-    "build": "./node_modules/.bin/gulp build",
-    "watch": "./node_modules/.bin/gulp watch",
-    "lint": "./node_modules/.bin/eslint ."
+    "start": "babel-node .",
+    "build": "gulp build",
+    "watch": "gulp watch",
+    "lint": "eslint ."
   },
   "dependencies": {
     "babel-cli": "^6.2.0",
