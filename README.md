@@ -25,3 +25,6 @@ npm run watch
 
 * TypeScript?
 * Clean out or serve old JS files?
+* Prevet source map filename from being revisioned, breaks connection
+* Reduce Promise polyfill size
+* Don't use babel-node in PROD
