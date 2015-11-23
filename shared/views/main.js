@@ -2,6 +2,7 @@ import h from 'virtual-dom/h';
 import exp from '../exp';
 import { assetMap, getAssetFilename } from '../helpers';
 
+// body may or may not be a promise
 export default ({ title, body, templateData }={}) => (
     Promise.resolve(body).then(resolvedBody => (
         h('html', [
