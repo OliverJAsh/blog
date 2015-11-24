@@ -2,11 +2,11 @@ import diff from 'virtual-dom/diff';
 import patch from 'virtual-dom/patch';
 import domToVdom from 'vdom-virtualize';
 
-import errorView from 'shared/views/error';
-import homeView from 'shared/views/home';
-import postView from 'shared/views/post';
+import errorView from '../../shared/views/error';
+import homeView from '../../shared/views/home';
+import postView from '../../shared/views/post';
 
-import { isContentCached, getContentUrl } from 'shared/helpers';
+import { isContentCached, getContentUrl } from '../../shared/helpers';
 
 navigator.serviceWorker.register('/service-worker.js')
     .then(() => {

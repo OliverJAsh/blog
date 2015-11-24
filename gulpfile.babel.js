@@ -3,9 +3,9 @@ import watch from 'gulp-watch';
 import babel from 'gulp-babel';
 import uglify from 'gulp-uglify';
 import sourcemaps from 'gulp-sourcemaps';
-import jspm from 'jspm';
-import jspmBuild from 'gulp-jspm-build';
 import rev from 'gulp-rev';
+import webpack from 'webpack-stream';
+import rename from 'gulp-rename';
 
 //
 // Build
@@ -21,22 +21,16 @@ gulp.task('build-service-worker', () => (
 ));
 
 gulp.task('build-app', () => (
-    // TODO: Don't output config.js https://github.com/buddhike/gulp-jspm-build/issues/8
-    // TODO: no sourceMappingUrl https://github.com/systemjs/builder/issues/406
-    // Would this work if jspm added sourceMappingUrl?
-    // sourcemaps.init().pipe(jspmBuild({
-    jspmBuild({
-        bundleSfx: true,
-        bundleOptions: { minify: true, sourceMaps: true, sourceMapContents: true },
-        bundles: [ { src: 'main', dst: 'main-bundle.js' } ]
-    })
-        // TODO: How should gulp-rev handle sourcemaps?
-        // https://github.com/sindresorhus/gulp-rev/issues/137
-        // https://github.com/buddhike/gulp-jspm-build/issues/5
-        // .pipe(sourcemaps.init({ loadMaps: true }))
-        // .pipe(sourcemaps.init())
+    gulp.src('./public-src/js/main.js')
+        .pipe(webpack({
+            module: { loaders: [ { loader: 'babel-loader' } ] },
+            devtool: 'source-map'
+        }))
+        .pipe(sourcemaps.init())
+        .pipe(rename('main-bundle.js'))
+        .pipe(uglify({ mangle: { toplevel: true }}))
         .pipe(rev())
-        // .pipe(sourcemaps.write('.'))
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('./public/js'))
         .pipe(rev.manifest())
         .pipe(gulp.dest('./public/js'))
@@ -54,11 +48,10 @@ gulp.task('watch-service-worker', ['build-service-worker'], () => (
     })
 ));
 
-const baseURL = new jspm.Builder().loader.baseURL.replace('file://', '');
+const baseURL = `${__dirname}/public-src/js`;
 gulp.task('watch-app', ['build-app'], () => (
     watch([
         `${baseURL}/**/*.js`,
-        `!${baseURL}/jspm_packages`,
         // Not all files live in the jspm base
         `${__dirname}/shared/**/*.js`
     ], () => {
