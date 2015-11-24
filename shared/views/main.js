@@ -9,6 +9,7 @@ export default ({ title, body, templateData }={}) => (
             h('head', [
                 h('title', [ `${title ? (title + ' – ') : ''} Blog` ]),
                 h('meta', { name: 'viewport', content: 'width=device-width' }),
+                h('script', { defer: true, src: getAssetFilename('vendor-bundle.js') }),
                 h('script', { defer: true, src: getAssetFilename('main-bundle.js') })
             ]),
             h('body', [

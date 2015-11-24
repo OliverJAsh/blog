@@ -4,8 +4,8 @@ import babel from 'gulp-babel';
 import uglify from 'gulp-uglify';
 import sourcemaps from 'gulp-sourcemaps';
 import rev from 'gulp-rev';
-import webpack from 'webpack-stream';
-import rename from 'gulp-rename';
+import webpackStream from 'webpack-stream';
+import webpack from 'webpack';
 
 //
 // Build
@@ -21,13 +21,17 @@ gulp.task('build-service-worker', () => (
 ));
 
 gulp.task('build-app', () => (
-    gulp.src('./public-src/js/main.js')
-        .pipe(webpack({
-            module: { loaders: [ { loader: 'babel-loader' } ] },
-            devtool: 'source-map'
-        }))
+    webpackStream({
+        entry: {
+            main: './public-src/js/main.js',
+            vendor: ['virtual-dom', 'vdom-virtualize']
+        },
+        output: { filename: '[name]-bundle.js' },
+        module: { loaders: [ { loader: 'babel-loader' } ] },
+        devtool: 'source-map',
+        plugins: [ new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor-bundle.js' }) ]
+    })
         .pipe(sourcemaps.init())
-        .pipe(rename('main-bundle.js'))
         .pipe(uglify({ mangle: { toplevel: true }}))
         .pipe(rev())
         .pipe(sourcemaps.write('.'))

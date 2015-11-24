@@ -3211,9 +3211,6 @@
         }
       }
     },
-    "gulp-rename": {
-      "version": "1.2.2"
-    },
     "gulp-rev": {
       "version": "6.0.1",
       "dependencies": {

@@ -83,7 +83,7 @@ siteRouter.get('/shell', (req, res, next) => (
 ));
 
 siteRouter.get('/shell-manifest.json', (req, res) => (
-    res.send([ '/shell', getAssetFilename('main-bundle.js') ])
+    res.send([ '/shell', getAssetFilename('main-bundle.js'), getAssetFilename('vendor-bundle.js') ])
 ));
 
 siteRouter.use((req, res, next) => (
