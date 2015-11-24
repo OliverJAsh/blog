@@ -1964,23 +1964,23 @@
             "abbrev": {
               "version": "1.0.7"
             },
-            "ansi": {
-              "version": "0.3.0"
-            },
             "ansi-regex": {
               "version": "2.0.0"
             },
+            "ansi": {
+              "version": "0.3.0"
+            },
             "ansi-styles": {
               "version": "2.1.0"
+            },
+            "are-we-there-yet": {
+              "version": "1.0.4"
             },
             "asn1": {
               "version": "0.1.11"
             },
             "assert-plus": {
               "version": "0.1.5"
-            },
-            "are-we-there-yet": {
-              "version": "1.0.4"
             },
             "async": {
               "version": "1.5.0"
@@ -1997,20 +1997,20 @@
             "boom": {
               "version": "2.10.1"
             },
+            "chalk": {
+              "version": "1.1.1"
+            },
             "caseless": {
               "version": "0.11.0"
             },
             "brace-expansion": {
               "version": "1.1.1"
             },
-            "combined-stream": {
-              "version": "1.0.5"
-            },
-            "chalk": {
-              "version": "1.1.1"
-            },
             "commander": {
               "version": "2.9.0"
+            },
+            "combined-stream": {
+              "version": "1.0.5"
             },
             "concat-map": {
               "version": "0.0.1"
@@ -2024,11 +2024,11 @@
             "ctype": {
               "version": "0.5.3"
             },
-            "debug": {
-              "version": "0.7.4"
-            },
             "deep-extend": {
               "version": "0.2.11"
+            },
+            "debug": {
+              "version": "0.7.4"
             },
             "delayed-stream": {
               "version": "1.0.0"
@@ -2036,26 +2036,29 @@
             "delegates": {
               "version": "0.1.0"
             },
-            "escape-string-regexp": {
-              "version": "1.0.3"
-            },
-            "forever-agent": {
-              "version": "0.6.1"
-            },
             "extend": {
               "version": "3.0.0"
+            },
+            "escape-string-regexp": {
+              "version": "1.0.3"
             },
             "form-data": {
               "version": "1.0.0-rc3"
             },
+            "forever-agent": {
+              "version": "0.6.1"
+            },
             "fstream": {
               "version": "1.0.8"
+            },
+            "generate-function": {
+              "version": "2.0.0"
             },
             "gauge": {
               "version": "1.2.2"
             },
-            "generate-function": {
-              "version": "2.0.0"
+            "generate-object-property": {
+              "version": "1.2.0"
             },
             "graceful-fs": {
               "version": "4.1.2"
@@ -2063,17 +2066,14 @@
             "graceful-readlink": {
               "version": "1.0.1"
             },
-            "generate-object-property": {
-              "version": "1.2.0"
-            },
             "har-validator": {
               "version": "2.0.2"
             },
-            "has-ansi": {
-              "version": "2.0.0"
-            },
             "has-unicode": {
               "version": "1.0.1"
+            },
+            "has-ansi": {
+              "version": "2.0.0"
             },
             "hawk": {
               "version": "3.1.0"
@@ -2084,6 +2084,9 @@
             "http-signature": {
               "version": "0.11.0"
             },
+            "is-property": {
+              "version": "1.0.2"
+            },
             "inherits": {
               "version": "2.0.1"
             },
@@ -2092,9 +2095,6 @@
             },
             "is-my-json-valid": {
               "version": "2.12.2"
-            },
-            "is-property": {
-              "version": "1.0.2"
             },
             "isarray": {
               "version": "0.0.1"
@@ -2111,32 +2111,35 @@
             "lodash._basetostring": {
               "version": "3.0.1"
             },
-            "lodash.pad": {
-              "version": "3.1.1"
+            "lodash._createpadding": {
+              "version": "3.6.1"
             },
             "lodash.padleft": {
               "version": "3.1.1"
             },
-            "lodash._createpadding": {
-              "version": "3.6.1"
-            },
-            "lodash.padright": {
+            "lodash.pad": {
               "version": "3.1.1"
             },
             "lodash.repeat": {
               "version": "3.0.1"
             },
-            "mime-db": {
-              "version": "1.19.0"
-            },
-            "minimist": {
-              "version": "0.0.8"
+            "lodash.padright": {
+              "version": "3.1.1"
             },
             "mime-types": {
               "version": "2.1.7"
             },
+            "minimist": {
+              "version": "0.0.8"
+            },
+            "mime-db": {
+              "version": "1.19.0"
+            },
             "mkdirp": {
               "version": "0.5.1"
+            },
+            "node-uuid": {
+              "version": "1.4.3"
             },
             "npmlog": {
               "version": "1.2.1"
@@ -2146,9 +2149,6 @@
             },
             "once": {
               "version": "1.1.1"
-            },
-            "node-uuid": {
-              "version": "1.4.3"
             },
             "path-is-absolute": {
               "version": "1.0.0"
@@ -2168,11 +2168,14 @@
             "request": {
               "version": "2.65.0"
             },
+            "semver": {
+              "version": "5.0.3"
+            },
             "sntp": {
               "version": "1.0.9"
             },
-            "semver": {
-              "version": "5.0.3"
+            "string_decoder": {
+              "version": "0.10.31"
             },
             "stringstream": {
               "version": "0.0.5"
@@ -2185,9 +2188,6 @@
             },
             "supports-color": {
               "version": "2.0.0"
-            },
-            "string_decoder": {
-              "version": "0.10.31"
             },
             "tar": {
               "version": "2.2.1"
@@ -2245,31 +2245,6 @@
                 }
               }
             },
-            "tar-pack": {
-              "version": "3.1.0",
-              "dependencies": {
-                "readable-stream": {
-                  "version": "1.0.33",
-                  "dependencies": {
-                    "core-util-is": {
-                      "version": "1.0.1"
-                    },
-                    "inherits": {
-                      "version": "2.0.1"
-                    },
-                    "isarray": {
-                      "version": "0.0.1"
-                    },
-                    "string_decoder": {
-                      "version": "0.10.31"
-                    }
-                  }
-                },
-                "rimraf": {
-                  "version": "2.2.8"
-                }
-              }
-            },
             "bl": {
               "version": "1.0.0",
               "dependencies": {
@@ -2295,6 +2270,31 @@
                       "version": "1.0.2"
                     }
                   }
+                }
+              }
+            },
+            "tar-pack": {
+              "version": "3.1.0",
+              "dependencies": {
+                "readable-stream": {
+                  "version": "1.0.33",
+                  "dependencies": {
+                    "core-util-is": {
+                      "version": "1.0.1"
+                    },
+                    "inherits": {
+                      "version": "2.0.1"
+                    },
+                    "isarray": {
+                      "version": "0.0.1"
+                    },
+                    "string_decoder": {
+                      "version": "0.10.31"
+                    }
+                  }
+                },
+                "rimraf": {
+                  "version": "2.2.8"
                 }
               }
             }
@@ -2403,11 +2403,11 @@
                 }
               }
             },
-            "es6-iterator": {
-              "version": "2.0.0"
-            },
             "es6-symbol": {
               "version": "3.0.1"
+            },
+            "es6-iterator": {
+              "version": "2.0.0"
             }
           }
         },
@@ -2801,14 +2801,14 @@
         "xml-escape": {
           "version": "1.0.0"
         },
-        "lodash._arrayeach": {
-          "version": "3.0.0"
-        },
         "lodash._arraycopy": {
           "version": "3.0.0"
         },
         "lodash._basefor": {
           "version": "3.0.2"
+        },
+        "lodash._arrayeach": {
+          "version": "3.0.0"
         },
         "lodash._bindcallback": {
           "version": "3.0.1"
