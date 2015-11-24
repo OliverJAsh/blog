@@ -22,12 +22,21 @@ gulp.task('build-service-worker', () => (
 
 gulp.task('build-app', () => (
     // TODO: Don't output config.js https://github.com/buddhike/gulp-jspm-build/issues/8
+    // TODO: no sourceMappingUrl https://github.com/systemjs/builder/issues/406
+    // Would this work if jspm added sourceMappingUrl?
+    // sourcemaps.init().pipe(jspmBuild({
     jspmBuild({
         bundleSfx: true,
         bundleOptions: { minify: true, sourceMaps: true, sourceMapContents: true },
         bundles: [ { src: 'main', dst: 'main-bundle.js' } ]
     })
+        // TODO: How should gulp-rev handle sourcemaps?
+        // https://github.com/sindresorhus/gulp-rev/issues/137
+        // https://github.com/buddhike/gulp-jspm-build/issues/5
+        // .pipe(sourcemaps.init({ loadMaps: true }))
+        // .pipe(sourcemaps.init())
         .pipe(rev())
+        // .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('./public/js'))
         .pipe(rev.manifest())
         .pipe(gulp.dest('./public/js'))
