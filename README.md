@@ -27,3 +27,5 @@ npm run watch
 * Prevet source map filename from being revisioned, breaks connection
 * Reduce Promise polyfill size
 * Don't use babel-node in PROD
+* Test SW update strategy
+* Polyfill Promise
