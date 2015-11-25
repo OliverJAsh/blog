@@ -4449,8 +4449,7 @@
       }
     },
     "webpack-stream": {
-      "version": "2.1.1",
-      "resolved": "git://github.com/oliverjash/webpack-stream.git#08c045339561ab8f020953c9374f8544f6c8d21e",
+      "version": "2.2.0",
       "dependencies": {
         "lodash.clone": {
           "version": "3.0.3",

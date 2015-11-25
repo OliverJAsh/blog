@@ -26,6 +26,6 @@
     "vdom-virtualize": "^1.0.1",
     "virtual-dom": "^2.1.1",
     "webpack": "^1.12.9",
-    "webpack-stream": "oliverjash/webpack-stream#oja-sourcemaps"
+    "webpack-stream": "^2.2.0"
   }
 }
