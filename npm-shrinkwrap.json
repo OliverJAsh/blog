@@ -1964,11 +1964,11 @@
             "abbrev": {
               "version": "1.0.7"
             },
-            "ansi-regex": {
-              "version": "2.0.0"
-            },
             "ansi": {
               "version": "0.3.0"
+            },
+            "ansi-regex": {
+              "version": "2.0.0"
             },
             "ansi-styles": {
               "version": "2.1.0"
@@ -1976,14 +1976,14 @@
             "are-we-there-yet": {
               "version": "1.0.4"
             },
-            "asn1": {
-              "version": "0.1.11"
+            "async": {
+              "version": "1.5.0"
             },
             "assert-plus": {
               "version": "0.1.5"
             },
-            "async": {
-              "version": "1.5.0"
+            "asn1": {
+              "version": "0.1.11"
             },
             "aws-sign2": {
               "version": "0.6.0"
@@ -1994,32 +1994,32 @@
             "block-stream": {
               "version": "0.0.8"
             },
-            "boom": {
-              "version": "2.10.1"
-            },
-            "chalk": {
-              "version": "1.1.1"
-            },
             "caseless": {
               "version": "0.11.0"
             },
             "brace-expansion": {
               "version": "1.1.1"
             },
-            "commander": {
-              "version": "2.9.0"
+            "boom": {
+              "version": "2.10.1"
+            },
+            "chalk": {
+              "version": "1.1.1"
             },
             "combined-stream": {
               "version": "1.0.5"
             },
+            "commander": {
+              "version": "2.9.0"
+            },
             "concat-map": {
               "version": "0.0.1"
             },
-            "cryptiles": {
-              "version": "2.0.5"
-            },
             "core-util-is": {
               "version": "1.0.1"
+            },
+            "cryptiles": {
+              "version": "2.0.5"
             },
             "ctype": {
               "version": "0.5.3"
@@ -2036,29 +2036,29 @@
             "delegates": {
               "version": "0.1.0"
             },
-            "extend": {
-              "version": "3.0.0"
-            },
             "escape-string-regexp": {
               "version": "1.0.3"
             },
-            "form-data": {
-              "version": "1.0.0-rc3"
+            "extend": {
+              "version": "3.0.0"
             },
             "forever-agent": {
               "version": "0.6.1"
             },
+            "form-data": {
+              "version": "1.0.0-rc3"
+            },
             "fstream": {
               "version": "1.0.8"
-            },
-            "generate-function": {
-              "version": "2.0.0"
             },
             "gauge": {
               "version": "1.2.2"
             },
             "generate-object-property": {
               "version": "1.2.0"
+            },
+            "generate-function": {
+              "version": "2.0.0"
             },
             "graceful-fs": {
               "version": "4.1.2"
@@ -2069,32 +2069,32 @@
             "har-validator": {
               "version": "2.0.2"
             },
-            "has-unicode": {
-              "version": "1.0.1"
-            },
             "has-ansi": {
               "version": "2.0.0"
             },
             "hawk": {
               "version": "3.1.0"
             },
-            "hoek": {
-              "version": "2.16.3"
-            },
             "http-signature": {
               "version": "0.11.0"
             },
-            "is-property": {
-              "version": "1.0.2"
+            "has-unicode": {
+              "version": "1.0.1"
+            },
+            "hoek": {
+              "version": "2.16.3"
             },
             "inherits": {
               "version": "2.0.1"
             },
+            "is-my-json-valid": {
+              "version": "2.12.2"
+            },
             "ini": {
               "version": "1.3.4"
             },
-            "is-my-json-valid": {
-              "version": "2.12.2"
+            "is-property": {
+              "version": "1.0.2"
             },
             "isarray": {
               "version": "0.0.1"
@@ -2102,11 +2102,11 @@
             "isstream": {
               "version": "0.1.2"
             },
-            "json-stringify-safe": {
-              "version": "5.0.1"
-            },
             "jsonpointer": {
               "version": "2.0.0"
+            },
+            "json-stringify-safe": {
+              "version": "5.0.1"
             },
             "lodash._basetostring": {
               "version": "3.0.1"
@@ -2117,14 +2117,17 @@
             "lodash.padleft": {
               "version": "3.1.1"
             },
-            "lodash.pad": {
+            "lodash.padright": {
               "version": "3.1.1"
             },
             "lodash.repeat": {
               "version": "3.0.1"
             },
-            "lodash.padright": {
+            "lodash.pad": {
               "version": "3.1.1"
+            },
+            "mime-db": {
+              "version": "1.19.0"
             },
             "mime-types": {
               "version": "2.1.7"
@@ -2132,35 +2135,32 @@
             "minimist": {
               "version": "0.0.8"
             },
-            "mime-db": {
-              "version": "1.19.0"
-            },
             "mkdirp": {
               "version": "0.5.1"
             },
             "node-uuid": {
               "version": "1.4.3"
             },
-            "npmlog": {
-              "version": "1.2.1"
-            },
             "oauth-sign": {
               "version": "0.8.0"
+            },
+            "npmlog": {
+              "version": "1.2.1"
             },
             "once": {
               "version": "1.1.1"
             },
-            "path-is-absolute": {
-              "version": "1.0.0"
-            },
             "pinkie": {
               "version": "1.0.0"
             },
-            "pinkie-promise": {
+            "path-is-absolute": {
               "version": "1.0.0"
             },
             "qs": {
               "version": "5.2.0"
+            },
+            "pinkie-promise": {
+              "version": "1.0.0"
             },
             "readable-stream": {
               "version": "1.1.13"
@@ -2171,17 +2171,17 @@
             "semver": {
               "version": "5.0.3"
             },
-            "sntp": {
-              "version": "1.0.9"
-            },
             "string_decoder": {
               "version": "0.10.31"
             },
-            "stringstream": {
-              "version": "0.0.5"
+            "sntp": {
+              "version": "1.0.9"
             },
             "strip-ansi": {
               "version": "3.0.0"
+            },
+            "stringstream": {
+              "version": "0.0.5"
             },
             "strip-json-comments": {
               "version": "0.1.3"
@@ -2403,11 +2403,11 @@
                 }
               }
             },
-            "es6-symbol": {
-              "version": "3.0.1"
-            },
             "es6-iterator": {
               "version": "2.0.0"
+            },
+            "es6-symbol": {
+              "version": "3.0.1"
             }
           }
         },
@@ -2804,11 +2804,11 @@
         "lodash._arraycopy": {
           "version": "3.0.0"
         },
-        "lodash._basefor": {
-          "version": "3.0.2"
-        },
         "lodash._arrayeach": {
           "version": "3.0.0"
+        },
+        "lodash._basefor": {
+          "version": "3.0.2"
         },
         "lodash._bindcallback": {
           "version": "3.0.1"
