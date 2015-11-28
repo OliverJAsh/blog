@@ -1,6 +1,6 @@
 import h from 'virtual-dom/h';
 import exp from '../exp';
-import { assetMap, getAssetFilename } from '../helpers';
+import { getAssetMap, getAssetFilename } from '../helpers';
 
 // TODO: Is there a better way to uglify?
 // This is the only way to reliably download async, run ASAP, but
@@ -35,7 +35,7 @@ export default ({ title, body, templateData }={}) => (
                     { id: 'template-data', type: 'application/json' },
                     JSON.stringify(templateData)
                 ),
-                h('script', `window.assetMap = ${JSON.stringify(assetMap)}`)
+                h('script', `window.assetMap = ${JSON.stringify(getAssetMap())}`)
             ])
         ])
     ))

@@ -10,7 +10,7 @@ export const isContentCached = (contentId) =>
         )
         : Promise.resolve(false);
 
-export const assetMap = (() => {
+export const getAssetMap = () => {
     if (isClient) {
         return window.assetMap;
     } else {
@@ -19,6 +19,6 @@ export const assetMap = (() => {
         // Babel doesn't polyfill System.import, so use CJS
         return require(assetMapPath);
     }
-})();
+};
 
-export const getAssetFilename = assetName => `/js/${assetMap[assetName]}`;
+export const getAssetFilename = assetName => `/js/${getAssetMap()[assetName]}`;

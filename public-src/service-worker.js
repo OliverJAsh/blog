@@ -1,4 +1,6 @@
 /* eslint-env serviceworker */
+// shellAssets is provided by concatenation
+/* global shellAssets */
 
 const version = 1;
 const staticCacheName = 'static-' + version;
@@ -34,18 +36,12 @@ const addResponsesToCache = (cacheName, requestUrlToResponseMap) => (
 );
 
 const updateCache = () => (
-    fetch('/shell-manifest.json').then(jsonResponse => {
-        if (jsonResponse.ok) {
-            return jsonResponse.clone().json().then(assetUrls => (
-                fetchAll(assetUrls).then(assetResponses => {
-                    const allAssetResponsesOk = assetResponses.every(response => response.ok);
+    fetchAll(shellAssets).then(assetResponses => {
+        const allAssetResponsesOk = assetResponses.every(response => response.ok);
 
-                    if (allAssetResponsesOk) {
-                        const assetRequestUrlToResponseMap = mapKeys(assetResponses, (response, index) => assetUrls[index]);
-                        return addResponsesToCache(staticCacheName, assetRequestUrlToResponseMap);
-                    }
-                })
-            ));
+        if (allAssetResponsesOk) {
+            const assetRequestUrlToResponseMap = mapKeys(assetResponses, (response, index) => shellAssets[index]);
+            return addResponsesToCache(staticCacheName, assetRequestUrlToResponseMap);
         }
     })
 );

@@ -2,19 +2,36 @@ import gulp from 'gulp';
 import watch from 'gulp-watch';
 import babel from 'gulp-babel';
 import uglify from 'gulp-uglify';
+import concat from 'gulp-concat';
 import sourcemaps from 'gulp-sourcemaps';
 import rev from 'gulp-rev';
 import webpackStream from 'webpack-stream';
 import webpack from 'webpack';
+import mergeStream from 'merge2';
+import vinylFromString from 'gulp-file';
+
+import { getAssetFilename } from './shared/helpers';
+
 
 //
 // Build
 //
 
-gulp.task('build-service-worker', () => (
-    gulp.src('./public-src/service-worker.js')
+gulp.task('build-service-worker', ['build-app'], () => {
+    const shellAssets = [
+        '/shell',
+        getAssetFilename('main-bundle.js'),
+        getAssetFilename('vendor-bundle.js')
+    ];
+
+    const serviceWorker = gulp.src('./public-src/service-worker.js');
+    const shellManifest = `const shellAssets = [${shellAssets.map(x => `'${x}'`)}];`;
+    const shellManifestFile = vinylFromString('shell-manifest.js', shellManifest, { src: true });
+
+    return mergeStream(shellManifestFile, serviceWorker)
         .pipe(sourcemaps.init())
         .pipe(babel())
+        .pipe(concat('service-worker.js'))
         // source map merging will use the lowest resolution of the two inputs,
         // i.e. the uglify source map.
         // https://github.com/mozilla/source-map/issues/216
@@ -23,8 +40,8 @@ gulp.task('build-service-worker', () => (
         // https://github.com/mishoo/UglifyJS2/issues/880
         .pipe(uglify())
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('./public'))
-));
+        .pipe(gulp.dest('./public'));
+});
 
 gulp.task('build-app', () => (
     webpackStream({
