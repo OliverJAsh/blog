@@ -15,11 +15,6 @@ gulp.task('build-service-worker', () => (
     gulp.src('./public-src/service-worker.js')
         .pipe(sourcemaps.init())
         .pipe(babel())
-        // gulp-sourcemaps outputs source map with "sources" attr same as "file",
-        // which DevTools doesn't like
-        // https://github.com/terinjokes/gulp-uglify/issues/105#issuecomment-160292080
-        // https://code.google.com/p/chromium/issues/detail?id=562870
-
         // source map merging will use the lowest resolution of the two inputs,
         // i.e. the uglify source map.
         // https://github.com/mozilla/source-map/issues/216

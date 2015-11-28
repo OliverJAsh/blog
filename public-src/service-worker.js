@@ -82,7 +82,12 @@ self.addEventListener('fetch', (event) => {
     const homeOrArticlePageRegExp = new RegExp('^/(posts/.+)?$');
     const shouldServeShell = isRootRequest && homeOrArticlePageRegExp.test(requestURL.pathname);
     if (shouldServeShell) {
-        event.respondWith(caches.match('/shell'));
+        event.respondWith(
+            caches.match('/shell').then(response => (
+                // Fallback to network in case the cache was deleted
+                response || fetch(event.request)
+            ))
+        );
     } else {
         event.respondWith(
             caches.match(event.request).then((response) => (
