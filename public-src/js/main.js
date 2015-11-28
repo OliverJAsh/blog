@@ -8,15 +8,20 @@ import postView from '../../shared/views/post';
 
 import { isContentCached, getContentUrl } from '../../shared/helpers';
 
+import waitForDomReady from './wait-for-dom-ready';
+
 navigator.serviceWorker.register('/service-worker.js')
     .then(() => {
         console.log('Service worker registered');
     });
 
 let rootNode = document.querySelector('html');
-let currentTree = domToVdom(rootNode);
+let currentTree;
 
 const updateContent = ({ source, tree: newTree }) => {
+    if (!currentTree) {
+        currentTree = domToVdom(rootNode);
+    }
     console.log(`Render: from ${source}`);
     console.timeStamp(`Render: from ${source}`);
     const patches = diff(currentTree, newTree);
@@ -73,20 +78,22 @@ const handlePageState = (contentId, { shouldCache, renderTemplate }) => {
         )
     );
 
-    const renders = () => {
-        const templateDataNode = document.querySelector('#template-data');
-        const templateData = templateDataNode && JSON.parse(templateDataNode.text);
-        if (templateData) {
-            // Re-render to enhance
-            // Duck type error page
-            const renderFn = templateData.statusCode && templateData.statusCode !== 200
-                ? errorView
-                : renderTemplate;
-            return renderFn(templateData).then(tree => updateContent({ source: 'template-data', tree }));
-        } else {
-            return initialRender().then(conditionalNetworkRender);
-        }
-    };
+    const renders = () => (
+        waitForDomReady().then(() => {
+            const templateDataNode = document.querySelector('#template-data');
+            const templateData = templateDataNode && JSON.parse(templateDataNode.text);
+            if (templateData) {
+                // Re-render to enhance
+                // Duck type error page
+                const renderFn = templateData.statusCode && templateData.statusCode !== 200
+                    ? errorView
+                    : renderTemplate;
+                return renderFn(templateData).then(tree => updateContent({ source: 'template-data', tree }));
+            } else {
+                return initialRender().then(conditionalNetworkRender);
+            }
+        })
+    );
 
     renders().then(() => {
         if (shouldCache) {
