@@ -78,23 +78,22 @@ gulp.task('build-app', () => (
         .pipe(gulp.dest('.'))
 ));
 
-// Promise of stream will not be waited on
-// https://github.com/gulpjs/gulp/issues/1421
-gulp.task('build-shell', ['build-app'], (cb) => {
+gulp.task('build-shell', ['build-app'], () => {
     const shellHtmlPromise = mainView().then(treeToHTML);
 
-    shellHtmlPromise.then(shellHtml => {
+    return shellHtmlPromise.then(shellHtml => {
         const shellVinyl = vinylFromString('shell.html', shellHtml, { src: true });
 
-        const stream = shellVinyl
-            .pipe(rev())
-            .pipe(gulp.dest('./public'))
-            .pipe(rev.manifest({
-                merge: true
-            }))
-            .pipe(gulp.dest('.'));
-
-        stream.on('end', cb);
+        return new Promise(resolve => {
+            shellVinyl
+                .pipe(rev())
+                .pipe(gulp.dest('./public'))
+                .pipe(rev.manifest({
+                    merge: true
+                }))
+                .pipe(gulp.dest('.'))
+                .on('end', resolve);
+        });
     });
 });
 
