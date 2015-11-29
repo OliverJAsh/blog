@@ -15,10 +15,13 @@ export const getAssetMap = () => {
         return window.assetMap;
     } else {
         const publicDir = `${__dirname}/../public`;
-        const assetMapPath = `${publicDir}/js/rev-manifest.json`;
+        const assetMapPath = `${publicDir}/rev-manifest.json`;
         // Babel doesn't polyfill System.import, so use CJS
-        return require(assetMapPath);
+        const fs = require('fs');
+        // We always want the latest, so don't use require
+        const revManifest = JSON.parse(fs.readFileSync(assetMapPath).toString());
+        return revManifest;
     }
 };
 
-export const getAssetFilename = assetName => `/js/${getAssetMap()[assetName]}`;
+export const getAssetFilename = assetName => `/${getAssetMap()[assetName]}`;

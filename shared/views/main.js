@@ -6,13 +6,13 @@ import { getAssetMap, getAssetFilename } from '../helpers';
 // This is the only way to reliably download async, run ASAP, but
 // run in order
 // http://www.html5rocks.com/en/tutorials/speed/script-loading/
-const downloadScriptsScript =
-`['${getAssetFilename('vendor-bundle.js')}', '${getAssetFilename('main-bundle.js')}'].forEach(function (src) {
+const getDownloadScriptsScript = () => (
+`['${getAssetFilename('js/vendor-bundle.js')}', '${getAssetFilename('js/main-bundle.js')}'].forEach(function (src) {
     var script = document.createElement('script');
     script.src = src;
     script.async = false;
     document.head.appendChild(script);
-});`;
+});`
 
 // body may or may not be a promise
 export default ({ title, body, templateData }={}) => (
@@ -23,7 +23,7 @@ export default ({ title, body, templateData }={}) => (
                 h('meta', { name: 'viewport', content: 'width=device-width' }),
                 // Execute JS async which fetches model data then renders when
                 // DOMContentLoaded
-                h('script', { innerHTML: downloadScriptsScript })
+                h('script', { innerHTML: getDownloadScriptsScript() })
             ]),
             h('body', [
                 h('h1',

@@ -74,12 +74,6 @@ siteRouter.get('/posts/:postId', (req, res, next) => {
     }
 });
 
-siteRouter.get('/shell', (req, res, next) => (
-    mainView()
-        .then(node => res.send(treeToHTML(node)))
-        .catch(next)
-));
-
 siteRouter.use((req, res, next) => (
     errorView({ statusCode: 404, message: http.STATUS_CODES[404] })
         .then(node => res.status(404).send(treeToHTML(node)))

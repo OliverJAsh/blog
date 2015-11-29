@@ -1,6 +1,6 @@
 /* eslint-env serviceworker */
-// shellAssets is provided by concatenation
-/* global shellAssets */
+// shellFileName and shellAssets are provided by concatenation
+/* global shellFileName, shellAssets */
 
 const version = 1;
 const staticCacheName = 'static-' + version;
@@ -35,16 +35,17 @@ const addResponsesToCache = (cacheName, requestUrlToResponseMap) => (
     ))
 );
 
-const updateCache = () => (
-    fetchAll(shellAssets).then(assetResponses => {
+const updateCache = () => {
+    const cacheUrls = shellAssets.concat(shellFileName);
+    return fetchAll(cacheUrls).then(assetResponses => {
         const allAssetResponsesOk = assetResponses.every(response => response.ok);
 
         if (allAssetResponsesOk) {
-            const assetRequestUrlToResponseMap = mapKeys(assetResponses, (response, index) => shellAssets[index]);
+            const assetRequestUrlToResponseMap = mapKeys(assetResponses, (response, index) => cacheUrls[index]);
             return addResponsesToCache(staticCacheName, assetRequestUrlToResponseMap);
         }
-    })
-);
+    });
+};
 
 self.addEventListener('install', (event) => {
     console.log('Install');
@@ -79,7 +80,7 @@ self.addEventListener('fetch', (event) => {
     const shouldServeShell = isRootRequest && homeOrArticlePageRegExp.test(requestURL.pathname);
     if (shouldServeShell) {
         event.respondWith(
-            caches.match('/shell').then(response => (
+            caches.match(shellFileName).then(response => (
                 // Fallback to network in case the cache was deleted
                 response || fetch(event.request)
             ))

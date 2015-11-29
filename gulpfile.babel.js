@@ -5,10 +5,14 @@ import uglify from 'gulp-uglify';
 import concat from 'gulp-concat';
 import sourcemaps from 'gulp-sourcemaps';
 import rev from 'gulp-rev';
+import rename from 'gulp-rename';
 import webpackStream from 'webpack-stream';
 import webpack from 'webpack';
 import mergeStream from 'merge2';
 import vinylFromString from 'gulp-file';
+import treeToHTML from 'vdom-to-html';
+
+import mainView from './shared/views/main';
 
 import { getAssetFilename } from './shared/helpers';
 
@@ -17,15 +21,19 @@ import { getAssetFilename } from './shared/helpers';
 // Build
 //
 
-gulp.task('build-service-worker', ['build-app'], () => {
-    const shellAssets = [
-        '/shell',
-        getAssetFilename('main-bundle.js'),
-        getAssetFilename('vendor-bundle.js')
+gulp.task('build-service-worker', ['build-app', 'build-shell'], () => {
+    const shellFileName = getAssetFilename('shell.html');
+    const shellAssetFileNames = [
+        getAssetFilename('js/main-bundle.js'),
+        getAssetFilename('js/vendor-bundle.js')
     ];
 
+    const shellManifest = `
+        const shellFileName = '${shellFileName}';
+        const shellAssets = [${shellAssetFileNames.map(x => `'${x}'`)}];
+    `;
+
     const serviceWorker = gulp.src('./public-src/service-worker.js');
-    const shellManifest = `const shellAssets = [${shellAssets.map(x => `'${x}'`)}];`;
     const shellManifestFile = vinylFromString('shell-manifest.js', shellManifest, { src: true });
 
     return mergeStream(shellManifestFile, serviceWorker)
@@ -49,21 +57,49 @@ gulp.task('build-app', () => (
             main: './public-src/js/main.js',
             vendor: ['virtual-dom', 'vdom-virtualize']
         },
+        // fs is only used on the server
+        node: { fs: 'empty' },
         output: { filename: '[name]-bundle.js' },
         module: { loaders: [ { loader: 'babel-loader' } ] },
         devtool: 'source-map',
         plugins: [ new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor-bundle.js' }) ]
     })
         .pipe(sourcemaps.init())
+        // https://github.com/shama/webpack-stream/issues/58#issuecomment-160432440
+        .pipe(rename(path => {
+            path.dirname = `${path.dirname}/js`;
+            return path;
+        }))
         .pipe(uglify())
         .pipe(rev())
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('./public/js'))
+        .pipe(gulp.dest('./public'))
         .pipe(rev.manifest())
-        .pipe(gulp.dest('./public/js'))
+        .pipe(gulp.dest('./public'))
 ));
 
-gulp.task('build', ['build-app', 'build-service-worker']);
+// Promise of stream will not be waited on
+// https://github.com/gulpjs/gulp/issues/1421
+gulp.task('build-shell', ['build-app'], (cb) => {
+    const shellHtmlPromise = mainView().then(treeToHTML);
+
+    shellHtmlPromise.then(shellHtml => {
+        const shellVinyl = vinylFromString('shell.html', shellHtml, { src: true });
+
+        const stream = shellVinyl
+            .pipe(rev())
+            .pipe(gulp.dest('./public'))
+            .pipe(rev.manifest({
+                cwd: './public',
+                merge: true
+            }))
+            .pipe(gulp.dest('./public'));
+
+        stream.on('end', cb);
+    });
+});
+
+gulp.task('build', ['build-app', 'build-shell', 'build-service-worker']);
 
 //
 // Watch
