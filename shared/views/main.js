@@ -19,7 +19,7 @@ export default ({ title, body, templateData }={}) => (
     Promise.resolve(body).then(resolvedBody => (
         h('html', [
             h('head', [
-                h('title', [ `${title ? (title + ' – ') : ''} Blog` ]),
+                h('title', [ `${title ? (title + ' – ') : ''}Blog` ]),
                 h('meta', { name: 'viewport', content: 'width=device-width' }),
                 // Execute JS async which fetches model data then renders when
                 // DOMContentLoaded
