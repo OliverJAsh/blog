@@ -4,6 +4,7 @@
   "scripts": {
     "start": "babel-node .",
     "build": "gulp build",
+    "clean": "rm -rf rev-manifest.json && rm -rf public",
     "watch": "gulp watch",
     "lint": "eslint ."
   },

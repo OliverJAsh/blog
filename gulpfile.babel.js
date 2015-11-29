@@ -75,7 +75,7 @@ gulp.task('build-app', () => (
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('./public'))
         .pipe(rev.manifest())
-        .pipe(gulp.dest('./public'))
+        .pipe(gulp.dest('.'))
 ));
 
 // Promise of stream will not be waited on
@@ -90,10 +90,9 @@ gulp.task('build-shell', ['build-app'], (cb) => {
             .pipe(rev())
             .pipe(gulp.dest('./public'))
             .pipe(rev.manifest({
-                cwd: './public',
                 merge: true
             }))
-            .pipe(gulp.dest('./public'));
+            .pipe(gulp.dest('.'));
 
         stream.on('end', cb);
     });

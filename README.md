@@ -29,4 +29,3 @@ npm run watch
 * TypeScript?
 * Don't use babel-node in PROD
 * No source map in PROD
-* Don't pipe rev manifest to public

@@ -14,8 +14,7 @@ export const getAssetMap = () => {
     if (isClient) {
         return window.assetMap;
     } else {
-        const publicDir = `${__dirname}/../public`;
-        const assetMapPath = `${publicDir}/rev-manifest.json`;
+        const assetMapPath = `${__dirname}/../rev-manifest.json`;
         // Babel doesn't polyfill System.import, so use CJS
         const fs = require('fs');
         // We always want the latest, so don't use require
