@@ -18,16 +18,18 @@ navigator.serviceWorker.register('/service-worker.js')
 let rootNode = document.querySelector('html');
 let currentTree;
 
-const updateContent = ({ source, tree: newTree }) => {
-    if (!currentTree) {
-        currentTree = domToVdom(rootNode);
-    }
-    console.log(`Render: from ${source}`);
-    console.timeStamp(`Render: from ${source}`);
-    const patches = diff(currentTree, newTree);
-    rootNode = patch(rootNode, patches);
-    currentTree = newTree;
-};
+const updateContent = ({ source, tree: newTree }) => (
+    waitForDomReady().then(() => {
+        if (!currentTree) {
+            currentTree = domToVdom(rootNode);
+        }
+        console.log(`Render: from ${source}`);
+        console.timeStamp(`Render: from ${source}`);
+        const patches = diff(currentTree, newTree);
+        rootNode = patch(rootNode, patches);
+        currentTree = newTree;
+    })
+);
 
 // Serve from cache or else network. When serving from cache,
 // fetch the newest content from the network to update the
@@ -78,24 +80,22 @@ const handlePageState = (contentId, { shouldCache, renderTemplate }) => {
         )
     );
 
-    const renders = () => (
-        waitForDomReady().then(() => {
-            const templateDataNode = document.querySelector('#template-data');
-            const templateData = templateDataNode && JSON.parse(templateDataNode.text);
-            if (templateData) {
-                // Re-render to enhance
-                // Duck type error page
-                const renderFn = templateData.statusCode && templateData.statusCode !== 200
-                    ? errorView
-                    : renderTemplate;
-                return renderFn(templateData).then(tree => updateContent({ source: 'template-data', tree }));
-            } else {
-                return initialRender().then(conditionalNetworkRender);
-            }
-        })
-    );
+    const renders = () => {
+        const templateDataNode = document.querySelector('#template-data');
+        const templateData = templateDataNode && JSON.parse(templateDataNode.text);
+        if (templateData) {
+            // Re-render to enhance
+            // Duck type error page
+            const renderFn = templateData.statusCode && templateData.statusCode !== 200
+                ? errorView
+                : renderTemplate;
+            return renderFn(templateData).then(tree => updateContent({ source: 'template-data', tree }));
+        } else {
+            return initialRender().then(conditionalNetworkRender);
+        }
+    };
 
-    renders().then(() => {
+    return renders().then(() => {
         if (shouldCache) {
             networkPromise.then(networkResponse => {
                 if (networkResponse.ok) {
