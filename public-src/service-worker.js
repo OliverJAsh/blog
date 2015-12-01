@@ -1,10 +1,16 @@
 /* eslint-env serviceworker */
-// shellFileName and shellAssets are provided by concatenation
-/* global shellFileName, shellAssets */
+
+import { getAssetFilename } from '../shared/helpers';
 
 const version = 1;
 const staticCacheName = 'static-' + version;
 const contentCacheName = 'content';
+
+const shellFileName = getAssetFilename('shell.html');
+const shellAssetFileNames = [
+    getAssetFilename('js/main-bundle.js'),
+    getAssetFilename('js/vendor-bundle.js')
+];
 
 const expectedCaches = [
     staticCacheName,
@@ -36,7 +42,7 @@ const addResponsesToCache = (cacheName, requestUrlToResponseMap) => (
 );
 
 const updateCache = () => {
-    const cacheUrls = shellAssets.concat(shellFileName);
+    const cacheUrls = shellAssetFileNames.concat(shellFileName);
     return fetchAll(cacheUrls).then(assetResponses => {
         const allAssetResponsesOk = assetResponses.every(response => response.ok);
 

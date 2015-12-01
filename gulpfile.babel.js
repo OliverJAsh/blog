@@ -1,45 +1,42 @@
 import gulp from 'gulp';
 import watch from 'gulp-watch';
-import babel from 'gulp-babel';
 import uglify from 'gulp-uglify';
-import concat from 'gulp-concat';
 import sourcemaps from 'gulp-sourcemaps';
 import rev from 'gulp-rev';
 import rename from 'gulp-rename';
 import webpackStream from 'webpack-stream';
 import webpack from 'webpack';
-import mergeStream from 'merge2';
 import vinylFromString from 'gulp-file';
 import treeToHTML from 'vdom-to-html';
 
 import mainView from './shared/views/main';
-
-import { getAssetFilename } from './shared/helpers';
 
 
 //
 // Build
 //
 
-gulp.task('build-service-worker', ['build-app', 'build-shell'], () => {
-    const shellFileName = getAssetFilename('shell.html');
-    const shellAssetFileNames = [
-        getAssetFilename('js/main-bundle.js'),
-        getAssetFilename('js/vendor-bundle.js')
-    ];
-
-    const shellManifest = `
-        const shellFileName = '${shellFileName}';
-        const shellAssets = [${shellAssetFileNames.map(x => `'${x}'`)}];
-    `;
-
-    const serviceWorker = gulp.src('./public-src/service-worker.js');
-    const shellManifestFile = vinylFromString('shell-manifest.js', shellManifest, { src: true });
-
-    return mergeStream(shellManifestFile, serviceWorker)
+gulp.task('build-service-worker', ['build-app', 'build-shell'], () => (
+    webpackStream({
+        entry: { 'service-worker': './public-src/service-worker.js' },
+        output: { filename: 'service-worker.js' },
+        module: {
+            loaders: [
+                { loader: 'babel-loader', test: /\.js$/ },
+                { loader: 'json-loader', test: /\.json$/ }
+            ]
+        },
+        devtool: 'source-map',
+        plugins: [
+            new webpack.DefinePlugin({
+                'process.env': {
+                    IS_WEBPACK: true,
+                    IS_WEBPACK_SERVICE_WORKER: true
+                }
+            })
+        ]
+    })
         .pipe(sourcemaps.init())
-        .pipe(babel())
-        .pipe(concat('service-worker.js'))
         // source map merging will use the lowest resolution of the two inputs,
         // i.e. the uglify source map.
         // https://github.com/mozilla/source-map/issues/216
@@ -48,8 +45,8 @@ gulp.task('build-service-worker', ['build-app', 'build-shell'], () => {
         // https://github.com/mishoo/UglifyJS2/issues/880
         .pipe(uglify())
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('./public'));
-});
+        .pipe(gulp.dest('./public'))
+));
 
 gulp.task('build-app', () => (
     webpackStream({
@@ -62,7 +59,15 @@ gulp.task('build-app', () => (
         output: { filename: '[name]-bundle.js' },
         module: { loaders: [ { loader: 'babel-loader' } ] },
         devtool: 'source-map',
-        plugins: [ new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor-bundle.js' }) ]
+        plugins: [
+            new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor-bundle.js' }),
+            new webpack.DefinePlugin({
+                'process.env': {
+                    IS_WEBPACK: true,
+                    IS_WEBPACK_SERVICE_WORKER: false
+                }
+            })
+        ]
     })
         .pipe(sourcemaps.init())
         // https://github.com/shama/webpack-stream/issues/58#issuecomment-160432440

@@ -3176,70 +3176,6 @@
         }
       }
     },
-    "gulp-babel": {
-      "version": "6.1.0",
-      "dependencies": {
-        "through2": {
-          "version": "2.0.0",
-          "dependencies": {
-            "readable-stream": {
-              "version": "2.0.4",
-              "dependencies": {
-                "core-util-is": {
-                  "version": "1.0.2"
-                },
-                "process-nextick-args": {
-                  "version": "1.0.3"
-                },
-                "string_decoder": {
-                  "version": "0.10.31"
-                },
-                "util-deprecate": {
-                  "version": "1.0.2"
-                }
-              }
-            }
-          }
-        },
-        "vinyl-sourcemaps-apply": {
-          "version": "0.2.0",
-          "dependencies": {
-            "source-map": {
-              "version": "0.5.3"
-            }
-          }
-        }
-      }
-    },
-    "gulp-concat": {
-      "version": "2.6.0",
-      "dependencies": {
-        "concat-with-sourcemaps": {
-          "version": "1.0.4",
-          "dependencies": {
-            "source-map": {
-              "version": "0.5.3"
-            }
-          }
-        },
-        "through2": {
-          "version": "0.6.5",
-          "dependencies": {
-            "readable-stream": {
-              "version": "1.0.33",
-              "dependencies": {
-                "core-util-is": {
-                  "version": "1.0.2"
-                },
-                "string_decoder": {
-                  "version": "0.10.31"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "gulp-file": {
       "version": "0.2.0",
       "dependencies": {
@@ -3937,6 +3873,9 @@
     "isarray": {
       "version": "0.0.1"
     },
+    "json-loader": {
+      "version": "0.5.4"
+    },
     "liftoff": {
       "version": "2.2.0",
       "dependencies": {
@@ -4181,9 +4120,6 @@
           "version": "1.0.0"
         }
       }
-    },
-    "merge2": {
-      "version": "0.3.6"
     },
     "mime-db": {
       "version": "1.19.0"

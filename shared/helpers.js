@@ -11,14 +11,11 @@ export const isContentCached = (contentId) =>
         : Promise.resolve(false);
 
 export const getAssetMap = () => {
-    if (isClient) {
+    if (process.env.IS_WEBPACK && !process.env.IS_WEBPACK_SERVICE_WORKER || isClient) {
         return window.assetMap;
     } else {
-        const assetMapPath = `${__dirname}/../rev-manifest.json`;
         // Babel doesn't polyfill System.import, so use CJS
-        const fs = require('fs');
-        // We always want the latest, so don't use require
-        const revManifest = JSON.parse(fs.readFileSync(assetMapPath).toString());
+        const revManifest = require('../rev-manifest.json');
         return revManifest;
     }
 };
