@@ -1,9 +1,9 @@
 export const getContentUrl = (contentId) => `/api/${contentId}`;
 
-export const isClient = typeof window !== 'undefined';
+export const isBrowserWindow = typeof window !== 'undefined';
 
 export const isContentCached = (contentId) =>
-    isClient
+    isBrowserWindow
         ? caches.open('content').then((cache) =>
             cache.match(getContentUrl(contentId))
                 .then(response => !! response)
@@ -11,7 +11,7 @@ export const isContentCached = (contentId) =>
         : Promise.resolve(false);
 
 export const getAssetMap = () => {
-    if (isClient) {
+    if (isBrowserWindow) {
         return window.assetMap;
     } else {
         // Babel doesn't polyfill System.import, so use CJS

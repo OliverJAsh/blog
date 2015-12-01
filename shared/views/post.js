@@ -1,13 +1,13 @@
 import h from 'virtual-dom/h';
 import mainView from './main';
 import exp from '../exp';
-import { isClient, getContentUrl, isContentCached } from '../helpers';
+import { isBrowserWindow, getContentUrl, isContentCached } from '../helpers';
 
 const postFragment = (post) => {
     const contentId = `posts/${post.id}`;
 
     return isContentCached(contentId).then(isCached => {
-        const cacheOption = exp(isClient) && (
+        const cacheOption = exp(isBrowserWindow) && (
             h('label', [
                 h('input', { type: 'checkbox', checked: isCached, onchange: (event) => (
                     caches.open('content').then((cache) => {
