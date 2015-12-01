@@ -26,15 +26,7 @@ gulp.task('build-service-worker', ['build-app', 'build-shell'], () => (
                 { loader: 'json-loader', test: /\.json$/ }
             ]
         },
-        devtool: 'source-map',
-        plugins: [
-            new webpack.DefinePlugin({
-                'process.env': {
-                    IS_WEBPACK: true,
-                    IS_WEBPACK_SERVICE_WORKER: true
-                }
-            })
-        ]
+        devtool: 'source-map'
     })
         .pipe(sourcemaps.init())
         // source map merging will use the lowest resolution of the two inputs,
@@ -61,12 +53,8 @@ gulp.task('build-app', () => (
         devtool: 'source-map',
         plugins: [
             new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor-bundle.js' }),
-            new webpack.DefinePlugin({
-                'process.env': {
-                    IS_WEBPACK: true,
-                    IS_WEBPACK_SERVICE_WORKER: false
-                }
-            })
+            // This will be provided on window when run on the client
+            new webpack.IgnorePlugin(/rev-manifest\.json$/)
         ]
     })
         .pipe(sourcemaps.init())

@@ -11,7 +11,7 @@ export const isContentCached = (contentId) =>
         : Promise.resolve(false);
 
 export const getAssetMap = () => {
-    if (process.env.IS_WEBPACK && !process.env.IS_WEBPACK_SERVICE_WORKER || isClient) {
+    if (isClient) {
         return window.assetMap;
     } else {
         // Babel doesn't polyfill System.import, so use CJS
