@@ -1,12 +1,12 @@
 import h from 'virtual-dom/h';
 import exp from '../exp';
-import { isBrowserWindow, getContentUrl, isContentCached } from '../helpers';
+import { getContentUrl, isContentCached, canCache } from '../helpers';
 
 export default (post) => {
     const contentId = `posts/${post.id}`;
 
     return isContentCached(contentId).then(isCached => {
-        const cacheOption = exp(isBrowserWindow) && (
+        const cacheOption = exp(canCache) && (
             h('label', [
                 h('input', { type: 'checkbox', checked: isCached, onchange: (event) => (
                     caches.open('content').then((cache) => {
