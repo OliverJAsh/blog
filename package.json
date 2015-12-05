@@ -25,6 +25,7 @@
     "gulp-watch": "^4.3.5",
     "json-loader": "^0.5.4",
     "sorted-object": "^1.0.0",
+    "uglify-js": "^2.6.1",
     "vdom-to-html": "^2.1.1",
     "vdom-virtualize": "^1.0.1",
     "virtual-dom": "^2.1.1",
