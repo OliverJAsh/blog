@@ -35,7 +35,7 @@ gulp.task('build-service-worker', ['build-app', 'build-shell'], () => (
         // https://github.com/mishoo/UglifyJS2/issues/880
         .pipe(uglify())
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('./target'))
+        .pipe(gulp.dest('./target/public'))
 ));
 
 gulp.task('build-app', () => (
@@ -70,21 +70,22 @@ gulp.task('build-app', () => (
         .pipe(uglify())
         .pipe(rev())
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('./target'))
+        .pipe(gulp.dest('./target/public'))
         .pipe(rev.manifest())
-        .pipe(gulp.dest('.'))
+        .pipe(gulp.dest('./target'))
 ));
 
 gulp.task('build-shell', ['build-app'], () => {
-    const shellHtml = treeToHTML(mainView({}));
+    const docType = '<!DOCTYPE html>';
+    const shellHtml = docType + treeToHTML(mainView({}));
 
     const shellVinyl = vinylFromString('shell.html', shellHtml, { src: true });
 
     shellVinyl
         .pipe(rev())
-        .pipe(gulp.dest('./target'))
-        .pipe(rev.manifest({ merge: true }))
-        .pipe(gulp.dest('.'));
+        .pipe(gulp.dest('./target/public'))
+        .pipe(rev.manifest({ merge: true, cwd: './target' }))
+        .pipe(gulp.dest('./target'));
 });
 
 gulp.task('build', ['build-app', 'build-shell', 'build-service-worker']);
