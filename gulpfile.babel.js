@@ -1,5 +1,4 @@
 import gulp from 'gulp';
-import watch from 'gulp-watch';
 import uglify from 'gulp-uglify';
 import sourcemaps from 'gulp-sourcemaps';
 import rev from 'gulp-rev';
@@ -75,32 +74,9 @@ gulp.task('build-shell', ['build-app'], () => {
 
     shellVinyl
         .pipe(rev())
-        .pipe(gulp.dest('./public'))
+        .pipe(gulp.dest('./target'))
         .pipe(rev.manifest({ merge: true }))
         .pipe(gulp.dest('.'));
 });
 
 gulp.task('build', ['build-app', 'build-shell', 'build-service-worker']);
-
-//
-// Watch
-//
-
-gulp.task('watch-service-worker', ['build-service-worker'], () => (
-    watch(['./public-src/service-worker.js'], () => {
-        gulp.start('build-service-worker');
-    })
-));
-
-const baseURL = `${__dirname}/public-src/js`;
-gulp.task('watch-app', ['build-app'], () => (
-    watch([
-        `${baseURL}/**/*.js`,
-        // Not all files live in the jspm base
-        `${__dirname}/shared/**/*.js`
-    ], () => {
-        gulp.start('build-app');
-    })
-));
-
-gulp.task('watch', ['watch-app', 'watch-service-worker']);
