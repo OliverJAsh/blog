@@ -6,10 +6,13 @@ import { isContentCached, getContentUrl, getPageTemplate, getErrorPageTemplate, 
 
 import waitForDomReady from './wait-for-dom-ready';
 
-navigator.serviceWorker.register('/service-worker.js')
-    .then(() => {
-        console.log('Service worker registered');
-    });
+const navigator = window.navigator;
+if (navigator && navigator.serviceWorker) {
+    navigator.serviceWorker.register('/service-worker.js')
+        .then(() => {
+            console.log('Service worker registered');
+        });
+}
 
 let rootNode = document.querySelector('#root');
 let currentTree;
