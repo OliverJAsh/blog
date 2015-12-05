@@ -22,11 +22,6 @@ npm run watch
 
 ## TODO
 
-* Test SW update strategy
-* Clean out or serve old JS files?
-* Delete old caches
-* Polyfill Promise
-* TypeScript?
+* Polyfill Promise for IE and old Android
 * Don't use babel-node in PROD
 * No source map in PROD
-* Gulp errors
