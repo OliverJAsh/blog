@@ -11,7 +11,6 @@ import treeToHTML from 'vdom-to-html';
 
 import mainView from './main';
 
-
 //
 // Build
 //
@@ -77,9 +76,7 @@ gulp.task('build-shell', ['build-app'], () => {
     shellVinyl
         .pipe(rev())
         .pipe(gulp.dest('./public'))
-        .pipe(rev.manifest({
-            merge: true
-        }))
+        .pipe(rev.manifest({ merge: true }))
         .pipe(gulp.dest('.'));
 });
 
