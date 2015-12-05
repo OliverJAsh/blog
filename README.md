@@ -1,6 +1,6 @@
 # Blog
 
-## Installation
+## Usage
 
 ```
 npm install
@@ -8,16 +8,9 @@ npm run build
 npm start
 ```
 
-## Development workflow
-```
-npm run build
-# OR
-npm run watch
-```
-
 ### Lint
 ```
-./node_modules/.bin/eslint .
+npm run lint
 ```
 
 ## TODO
