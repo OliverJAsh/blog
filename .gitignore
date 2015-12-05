@@ -1,4 +1,4 @@
 /node_modules/
-/public/
+/target/
 /npm-debug.log
 /rev-manifest.json

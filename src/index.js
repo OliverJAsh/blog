@@ -23,9 +23,9 @@ app.use(compression());
 
 // Order matters
 const secondsInAYear = 365 * 24 * 60 * 60;
-app.use('/js', express.static(`${__dirname}/public/js`, { maxAge: secondsInAYear * 1000 }));
+app.use('/js', express.static(`${__dirname}/../target/js`, { maxAge: secondsInAYear * 1000 }));
 // We don't want the service worker to have a cache max age
-app.use('/', express.static(`${__dirname}/public`));
+app.use('/', express.static(`${__dirname}/../target`));
 
 const sortPostsByDateDesc = a => a.sort((postA, postB) => postA.date < postB.date);
 

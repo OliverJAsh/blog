@@ -8,7 +8,7 @@ import webpack from 'webpack';
 import vinylFromString from 'gulp-file';
 import treeToHTML from 'vdom-to-html';
 
-import mainView from './main';
+import mainView from './src/main';
 
 //
 // Build
@@ -16,7 +16,7 @@ import mainView from './main';
 
 gulp.task('build-service-worker', ['build-app', 'build-shell'], () => (
     webpackStream({
-        entry: { 'service-worker': './public-src/service-worker.js' },
+        entry: { 'service-worker': './src/public/service-worker.js' },
         output: { filename: 'service-worker.js' },
         module: {
             loaders: [
@@ -35,13 +35,13 @@ gulp.task('build-service-worker', ['build-app', 'build-shell'], () => (
         // https://github.com/mishoo/UglifyJS2/issues/880
         .pipe(uglify())
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('./public'))
+        .pipe(gulp.dest('./target'))
 ));
 
 gulp.task('build-app', () => (
     webpackStream({
         entry: {
-            main: './public-src/js/main.js',
+            main: './src/public/js/main.js',
             vendor: ['virtual-dom', 'vdom-virtualize']
         },
         // fs is only used on the server
@@ -62,7 +62,7 @@ gulp.task('build-app', () => (
         .pipe(uglify())
         .pipe(rev())
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('./public'))
+        .pipe(gulp.dest('./target'))
         .pipe(rev.manifest())
         .pipe(gulp.dest('.'))
 ));
