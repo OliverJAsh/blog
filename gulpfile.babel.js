@@ -42,7 +42,13 @@ gulp.task('build-app', () => (
     webpackStream({
         entry: {
             main: './src/public/js/main.js',
-            vendor: ['virtual-dom', 'vdom-virtualize']
+            vendor: [
+                'virtual-dom',
+                'vdom-virtualize',
+                'promise-polyfill',
+                // https://github.com/webpack/webpack/issues/1717
+                'imports?this=>global!exports?global.fetch!whatwg-fetch'
+            ]
         },
         // fs is only used on the server
         node: { fs: 'empty' },
@@ -50,7 +56,11 @@ gulp.task('build-app', () => (
         module: { loaders: [ { loader: 'babel-loader' } ] },
         devtool: 'source-map',
         plugins: [
-            new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor-bundle.js' })
+            new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor-bundle.js' }),
+            new webpack.ProvidePlugin({
+                fetch: 'imports?this=>global!exports?global.fetch!whatwg-fetch',
+                Promise: 'promise-polyfill'
+            })
         ]
     })
         .pipe(sourcemaps.init())

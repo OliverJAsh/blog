@@ -8,9 +8,11 @@ export const isBrowserWindow = typeof window !== 'undefined';
 
 export const isContentCached = (contentId) =>
     isBrowserWindow
-        ? caches.open('content').then((cache) =>
-            cache.match(getContentUrl(contentId))
-                .then(response => !! response)
+        ? Promise.resolve(
+            !!window.caches
+            && caches.open('content').then(cache => (
+                cache.match(getContentUrl(contentId)).then(response => !!response)
+            ))
         )
         : Promise.resolve(false);
 

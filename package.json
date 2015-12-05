@@ -14,6 +14,7 @@
     "compression": "^1.5.2",
     "eslint": "^1.10.1",
     "eslint-plugin-html": "^1.1.0",
+    "exports-loader": "^0.6.2",
     "express": "^4.13.3",
     "gulp": "^3.9.0",
     "gulp-file": "^0.2.0",
@@ -21,13 +22,16 @@
     "gulp-rev": "^6.0.1",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^1.5.1",
+    "imports-loader": "^0.6.5",
     "json-loader": "^0.5.4",
+    "promise-polyfill": "^2.1.0",
     "sorted-object": "^1.0.0",
     "uglify-js": "^2.6.1",
     "vdom-to-html": "^2.1.1",
     "vdom-virtualize": "^1.0.1",
     "virtual-dom": "^2.1.1",
     "webpack": "^1.12.9",
-    "webpack-stream": "^2.2.0"
+    "webpack-stream": "^2.2.0",
+    "whatwg-fetch": "^0.10.1"
   }
 }

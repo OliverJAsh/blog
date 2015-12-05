@@ -43,7 +43,7 @@ const createPage = (pageTemplate, state) => ({
 const handlePageState = (pageTemplate) => {
     const url = getContentUrl(pageTemplate.contentId);
     const networkPromise = fetch(url);
-    const cachePromise = caches.match(url);
+    const cachePromise = Promise.resolve(window.caches && caches.match(url));
 
     // Cache or else network
     const initialRender = () => (
@@ -98,7 +98,10 @@ const handlePageState = (pageTemplate) => {
         }
     };
 
-    const shouldCachePromise = Promise.resolve(pageTemplate.shouldCache || isContentCached(pageTemplate.contentId));
+    const shouldCachePromise = Promise.resolve(
+        !!window.caches
+        && (pageTemplate.shouldCache || isContentCached(pageTemplate.contentId))
+    );
 
     return renders().then(() => {
         shouldCachePromise.then(shouldCache => {
