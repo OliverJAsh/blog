@@ -6,10 +6,12 @@ export const getContentUrl = (contentId) => `/api/${contentId}`;
 
 export const isBrowserWindow = typeof window !== 'undefined';
 
+const isDev = isBrowserWindow && window.location.hostname === 'localhost';
+export const canCache = isBrowserWindow && !!window.caches && (window.location.protocol === 'https:' || isDev);
 export const isContentCached = (contentId) =>
     isBrowserWindow
         ? Promise.resolve(
-            !!window.caches
+            canCache
             && caches.open('content').then(cache => (
                 cache.match(getContentUrl(contentId)).then(response => !!response)
             ))

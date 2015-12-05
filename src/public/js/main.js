@@ -2,7 +2,7 @@ import diff from 'virtual-dom/diff';
 import patch from 'virtual-dom/patch';
 import domToVdom from 'vdom-virtualize';
 
-import { isContentCached, getContentUrl, getPageTemplate, getErrorPageTemplate, getPageTitle } from '../../shared/helpers';
+import { isContentCached, getContentUrl, getPageTemplate, getErrorPageTemplate, getPageTitle, canCache } from '../../shared/helpers';
 
 import waitForDomReady from './wait-for-dom-ready';
 
@@ -46,7 +46,7 @@ const createPage = (pageTemplate, state) => ({
 const handlePageState = (pageTemplate) => {
     const url = getContentUrl(pageTemplate.contentId);
     const networkPromise = fetch(url);
-    const cachePromise = Promise.resolve(window.caches && caches.match(url));
+    const cachePromise = Promise.resolve(canCache && caches.match(url));
 
     // Cache or else network
     const initialRender = () => (
@@ -102,8 +102,8 @@ const handlePageState = (pageTemplate) => {
     };
 
     const shouldCachePromise = Promise.resolve(
-        !!window.caches
-        && (pageTemplate.shouldCache || isContentCached(pageTemplate.contentId))
+        canCache &&
+        (pageTemplate.shouldCache || isContentCached(pageTemplate.contentId))
     );
 
     return renders().then(() => {
