@@ -9,7 +9,7 @@ import webpack from 'webpack';
 import vinylFromString from 'gulp-file';
 import treeToHTML from 'vdom-to-html';
 
-import mainView from './shared/views/main';
+import mainView from './main';
 
 
 //
@@ -52,9 +52,7 @@ gulp.task('build-app', () => (
         module: { loaders: [ { loader: 'babel-loader' } ] },
         devtool: 'source-map',
         plugins: [
-            new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor-bundle.js' }),
-            // This will be provided on window when run on the client
-            new webpack.IgnorePlugin(/rev-manifest\.json$/)
+            new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor-bundle.js' })
         ]
     })
         .pipe(sourcemaps.init())
@@ -72,22 +70,17 @@ gulp.task('build-app', () => (
 ));
 
 gulp.task('build-shell', ['build-app'], () => {
-    const shellHtmlPromise = mainView().then(treeToHTML);
+    const shellHtml = treeToHTML(mainView({}));
 
-    return shellHtmlPromise.then(shellHtml => {
-        const shellVinyl = vinylFromString('shell.html', shellHtml, { src: true });
+    const shellVinyl = vinylFromString('shell.html', shellHtml, { src: true });
 
-        return new Promise(resolve => {
-            shellVinyl
-                .pipe(rev())
-                .pipe(gulp.dest('./public'))
-                .pipe(rev.manifest({
-                    merge: true
-                }))
-                .pipe(gulp.dest('.'))
-                .on('end', resolve);
-        });
-    });
+    shellVinyl
+        .pipe(rev())
+        .pipe(gulp.dest('./public'))
+        .pipe(rev.manifest({
+            merge: true
+        }))
+        .pipe(gulp.dest('.'));
 });
 
 gulp.task('build', ['build-app', 'build-shell', 'build-service-worker']);

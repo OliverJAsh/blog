@@ -2,11 +2,7 @@ import diff from 'virtual-dom/diff';
 import patch from 'virtual-dom/patch';
 import domToVdom from 'vdom-virtualize';
 
-import errorView from '../../shared/views/error';
-import homeView from '../../shared/views/home';
-import postView from '../../shared/views/post';
-
-import { isContentCached, getContentUrl } from '../../shared/helpers';
+import { isContentCached, getContentUrl, getPageTemplate, getErrorPageTemplate, getPageTitle } from '../../shared/helpers';
 
 import waitForDomReady from './wait-for-dom-ready';
 
@@ -15,28 +11,37 @@ navigator.serviceWorker.register('/service-worker.js')
         console.log('Service worker registered');
     });
 
-let rootNode = document.querySelector('html');
+let rootNode = document.querySelector('#root');
 let currentTree;
 
-const updateContent = ({ source, tree: newTree }) => (
+const updateContent = ({ source, page: { tree: newTreePromise, title } }) => (
     waitForDomReady().then(() => {
-        if (!currentTree) {
-            currentTree = domToVdom(rootNode);
-        }
-        console.log(`Render: from ${source}`);
-        console.timeStamp(`Render: from ${source}`);
-        const patches = diff(currentTree, newTree);
-        rootNode = patch(rootNode, patches);
-        currentTree = newTree;
+        return newTreePromise.then(newTree => {
+            if (!currentTree) {
+                currentTree = domToVdom(rootNode);
+            }
+            console.log(`Render: from ${source}`);
+            console.timeStamp(`Render: from ${source}`);
+            const patches = diff(currentTree, newTree);
+            rootNode = patch(rootNode, patches);
+            currentTree = newTree;
+
+            document.title = getPageTitle(title);
+        });
     })
 );
+
+const createPage = (pageTemplate, state) => ({
+    tree: pageTemplate.getTree(state),
+    title: pageTemplate.getTitle(state)
+});
 
 // Serve from cache or else network. When serving from cache,
 // fetch the newest content from the network to update the
 // content on screen and then revalidate the cache.
 // This function has side effects.
-const handlePageState = (contentId, { shouldCache, renderTemplate }) => {
-    const url = getContentUrl(contentId);
+const handlePageState = (pageTemplate) => {
+    const url = getContentUrl(pageTemplate.contentId);
     const networkPromise = fetch(url);
     const cachePromise = caches.match(url);
 
@@ -46,20 +51,19 @@ const handlePageState = (contentId, { shouldCache, renderTemplate }) => {
             .then(cacheResponse => {
                 if (cacheResponse) {
                     return cacheResponse.clone().json()
-                        .then(renderTemplate)
-                        .then(tree => ({ source: 'cache', tree }));
+                        .then((state) => ({ source: 'cache', page: createPage(pageTemplate, state) }));
                 } else {
                     return networkPromise
                         .then(networkResponse => {
                             if (networkResponse.ok) {
                                 return networkResponse.clone().json()
-                                    .then(renderTemplate);
+                                    .then(state => createPage(pageTemplate, state));
                             } else {
                                 return networkResponse.clone().json()
-                                    .then(errorView);
+                                    .then(error => createPage(getErrorPageTemplate(), error));
                             }
-                        }, error => errorView({ message: error.message }))
-                        .then(tree => ({ source: 'network', tree }));
+                        }, error => createPage(getErrorPageTemplate(), error))
+                        .then(page => ({ source: 'network', page }));
                 }
             })
             .then(updateContent)
@@ -72,8 +76,7 @@ const handlePageState = (contentId, { shouldCache, renderTemplate }) => {
             networkPromise.then(networkResponse => {
                 if (cacheResponse && networkResponse.ok) {
                     return networkResponse.clone().json()
-                        .then(renderTemplate)
-                        .then(tree => ({ source: 'network', tree }))
+                        .then(state => ({ source: 'network', page: createPage(pageTemplate, state) }))
                         .then(updateContent);
                 }
             })
@@ -81,29 +84,33 @@ const handlePageState = (contentId, { shouldCache, renderTemplate }) => {
     );
 
     const renders = () => {
-        const templateDataNode = document.querySelector('#template-data');
-        const templateData = templateDataNode && JSON.parse(templateDataNode.text);
-        if (templateData) {
+        const stateNode = document.querySelector('#state');
+        const currentState = stateNode && JSON.parse(stateNode.text);
+        if (currentState) {
             // Re-render to enhance
             // Duck type error page
-            const renderFn = templateData.statusCode && templateData.statusCode !== 200
-                ? errorView
-                : renderTemplate;
-            return renderFn(templateData).then(tree => updateContent({ source: 'template-data', tree }));
+            const page = currentState.statusCode && currentState.statusCode !== 200
+                ? createPage(getErrorPageTemplate(), currentState)
+                : createPage(pageTemplate, currentState);
+            return updateContent({ source: 'current-state', page });
         } else {
             return initialRender().then(conditionalNetworkRender);
         }
     };
 
+    const shouldCachePromise = Promise.resolve(pageTemplate.shouldCache || isContentCached(pageTemplate.contentId));
+
     return renders().then(() => {
-        if (shouldCache) {
-            networkPromise.then(networkResponse => {
-                if (networkResponse.ok) {
-                    console.log('Cache: update');
-                    return caches.open('content').then(cache => cache.put(url, networkResponse.clone()));
-                }
-            });
-        }
+        shouldCachePromise.then(shouldCache => {
+            if (shouldCache) {
+                networkPromise.then(networkResponse => {
+                    if (networkResponse.ok) {
+                        console.log('Cache: update');
+                        return caches.open('content').then(cache => cache.put(url, networkResponse.clone()));
+                    }
+                });
+            }
+        });
     });
 };
 
@@ -111,23 +118,5 @@ const handlePageState = (contentId, { shouldCache, renderTemplate }) => {
 // Routing
 //
 
-const homeRegExp = /^\/$/;
-const postRegExp = /^\/posts\/(.*)$/;
-if (homeRegExp.test(location.pathname)) {
-    const contentId = 'posts';
-
-    handlePageState(contentId, {
-        shouldCache: true,
-        renderTemplate: homeView
-    });
-}
-else if (postRegExp.test(location.pathname)) {
-    const contentId = 'posts/' + location.pathname.match(postRegExp)[1];
-
-    isContentCached(contentId).then(isCached =>
-        handlePageState(contentId, {
-            shouldCache: isCached,
-            renderTemplate: postView
-        })
-    );
-}
+const page = getPageTemplate(location.pathname);
+handlePageState(page);

@@ -3,10 +3,9 @@ import express from 'express';
 import compression from 'compression';
 import treeToHTML from 'vdom-to-html';
 
-import errorView from './shared/views/error';
-import homeView from './shared/views/home';
-import postView from './shared/views/post';
-import mainView from './shared/views/main';
+import mainView from './main';
+
+import { getPageTemplate, getErrorPageTemplate } from './shared/helpers';
 
 const posts = [
     { id: 'my-first-article', title: 'My First Article', body: '<p>Hello, World!</p>', date: new Date(2015, 0, 1) },
@@ -57,28 +56,38 @@ apiRouter.use((req, res) => (
 //
 var siteRouter = express.Router();
 
-siteRouter.get('/', (req, res, next) => (
-    homeView(sortPostsByDateDesc(posts))
-        .then(node => res.send(treeToHTML(node)))
-        .catch(next)
-));
+const render = (page, state) => (
+    page.getTree(state)
+        .then(node => mainView({ title: page.getTitle(state), state, body: node }))
+        .then(treeToHTML)
+);
+
+siteRouter.get('/', (req, res, next) => {
+    const state = sortPostsByDateDesc(posts);
+    const page = getPageTemplate(req.path);
+    render(page, state)
+        .then(html => res.send(html))
+        .catch(next);
+});
 
 siteRouter.get('/posts/:postId', (req, res, next) => {
-    const post = postIdToPostMap[req.params.postId];
-    if (post) {
-        postView(post)
-            .then(node => res.send(treeToHTML(node)))
+    const state = postIdToPostMap[req.params.postId];
+    if (state) {
+        const page = getPageTemplate(req.path);
+        render(page, state)
+            .then(html => res.send(html))
             .catch(next);
     } else {
         next();
     }
 });
 
-siteRouter.use((req, res, next) => (
-    errorView({ statusCode: 404, message: http.STATUS_CODES[404] })
-        .then(node => res.status(404).send(treeToHTML(node)))
-        .catch(next)
-));
+siteRouter.use((req, res, next) => {
+    const state = { statusCode: 404, message: http.STATUS_CODES[404] };
+    render(getErrorPageTemplate(), state)
+        .then(html => res.status(404).send(html))
+        .catch(next);
+});
 
 // Order matters
 app.use('/api', apiRouter);

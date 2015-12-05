@@ -1,6 +1,6 @@
 /* eslint-env serviceworker */
 
-import { getAssetFilename } from '../shared/helpers';
+import { getAssetFilename } from '../helpers';
 
 const version = 1;
 const staticCacheName = 'static-' + version;

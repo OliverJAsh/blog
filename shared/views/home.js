@@ -1,9 +1,8 @@
 import h from 'virtual-dom/h';
-import mainView from './main';
 import exp from '../exp';
 import { isContentCached } from '../helpers';
 
-const postsFragment = (posts) => {
+export default (posts) => {
     const articleLINodesPromise = Promise.all(posts.map((post) => {
         const contentId = `posts/${post.id}`;
         return isContentCached(contentId).then(isCached => (
@@ -19,7 +18,3 @@ const postsFragment = (posts) => {
         h('ul', articleLINodes)
     ));
 };
-
-export default (posts) => (
-    mainView({ body: postsFragment(posts), templateData: posts })
-);

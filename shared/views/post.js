@@ -1,9 +1,8 @@
 import h from 'virtual-dom/h';
-import mainView from './main';
 import exp from '../exp';
 import { isBrowserWindow, getContentUrl, isContentCached } from '../helpers';
 
-const postFragment = (post) => {
+export default (post) => {
     const contentId = `posts/${post.id}`;
 
     return isContentCached(contentId).then(isCached => {
@@ -37,8 +36,3 @@ const postFragment = (post) => {
         ]);
     });
 };
-
-
-export default (post) => (
-    mainView({ title: post.title, body: postFragment(post), templateData: post })
-);
