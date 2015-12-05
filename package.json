@@ -1,7 +1,8 @@
 {
   "private": true,
   "scripts": {
-    "start": "babel-node src",
+    "compile": "cd src && babel *.js --out-dir ../target && babel shared --out-dir ../target/shared",
+    "start": "npm run compile && node target/",
     "build": "gulp build",
     "clean": "rm -rf rev-manifest.json && rm -rf target",
     "lint": "eslint ."
