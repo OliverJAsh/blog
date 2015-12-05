@@ -50,8 +50,6 @@ gulp.task('build-app', () => (
                 'imports?this=>global!exports?global.fetch!whatwg-fetch'
             ]
         },
-        // fs is only used on the server
-        node: { fs: 'empty' },
         output: { filename: '[name]-bundle.js' },
         module: { loaders: [ { loader: 'babel-loader' } ] },
         devtool: 'source-map',
