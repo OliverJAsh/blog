@@ -2,15 +2,15 @@
 
 import { getAssetFilename } from '../helpers';
 
-const version = 1;
-const staticCacheName = 'static-' + version;
+const staticCacheName = 'static';
 const contentCacheName = 'content';
 
-const shellFileName = getAssetFilename('shell.html');
-const shellAssetFileNames = [
-    getAssetFilename('js/main-bundle.js'),
-    getAssetFilename('js/vendor-bundle.js')
+const shellUrl = `${location.origin}/${getAssetFilename('shell.html')}`;
+const shellAssetUrls = [
+    `${location.origin}/${getAssetFilename('js/main-bundle.js')}`,
+    `${location.origin}/${getAssetFilename('js/vendor-bundle.js')}`
 ];
+const cacheUrls = shellAssetUrls.concat(shellUrl);
 
 const expectedCaches = [
     staticCacheName,
@@ -32,6 +32,7 @@ const mapKeys = (collection, mapFn) => (
         return acc;
     }, {})
 );
+const contains = (array, itemToFind) => array.some(item => item === itemToFind);
 
 const fetchAll = inputs => Promise.all(inputs.map(input => fetch(input)));
 
@@ -42,7 +43,6 @@ const addResponsesToCache = (cacheName, requestUrlToResponseMap) => (
 );
 
 const updateCache = () => {
-    const cacheUrls = shellAssetFileNames.concat(shellFileName);
     return fetchAll(cacheUrls).then(assetResponses => {
         const allAssetResponsesOk = assetResponses.every(response => response.ok);
 
@@ -61,19 +61,36 @@ self.addEventListener('install', (event) => {
 
 self.addEventListener('activate', (event) => {
     console.log('Activate');
-    const cacheKeysForDeletionPromise = caches.keys().then((keys) => (
-        keys.filter((key) => (
-            expectedCaches.every((i) => key !== i)
-        ))
-    ));
+
+    const flushOldCaches = () => {
+        const keysToDeletePromise = caches.keys().then(cacheNames => (
+            cacheNames.filter(cacheName => !contains(expectedCaches, cacheName))
+        ));
+
+        return keysToDeletePromise.then(keysToDelete => {
+            console.log('Flushing old caches: ' + keysToDelete);
+            return Promise.all(keysToDelete.map(key => caches.delete(key)));
+        });
+    };
+
+    const flushOldStaticCacheItems = () => {
+        return caches.open(staticCacheName).then(cache => {
+            const staticKeysToDeletePromise = cache.keys().then(requests => (
+                requests.filter(request => !contains(cacheUrls, request.url))
+            ));
+
+            return staticKeysToDeletePromise.then(staticKeysToDelete => {
+                console.log('Flushing old cache items: ' + staticKeysToDelete.map(request => request.url));
+                return Promise.all(staticKeysToDelete.map(key => cache.delete(key)));
+            });
+        });
+    };
 
     event.waitUntil(
-        cacheKeysForDeletionPromise.then((cacheKeysForDeletion) => {
-            console.log('Flushing old caches: ' + cacheKeysForDeletion);
-            return Promise.all(cacheKeysForDeletion.map((key) => (
-                caches.delete(key)
-            )));
-        })
+        Promise.all([
+            flushOldCaches(),
+            flushOldStaticCacheItems()
+        ])
     );
 });
 
@@ -86,7 +103,7 @@ self.addEventListener('fetch', (event) => {
     const shouldServeShell = isRootRequest && homeOrArticlePageRegExp.test(requestURL.pathname);
     if (shouldServeShell) {
         event.respondWith(
-            caches.match(shellFileName).then(response => (
+            caches.match(shellUrl).then(response => (
                 // Fallback to network in case the cache was deleted
                 response || fetch(event.request)
             ))
