@@ -1,5 +1,4 @@
 {
-  "name": "blog",
   "private": true,
   "scripts": {
     "start": "babel-node src",
