@@ -12,9 +12,8 @@ export default (post) => {
                     caches.open('content').then((cache) => {
                         const shouldCache = event.target.checked;
                         if (shouldCache) {
-                            return cache.add(getContentUrl(contentId)).catch(() =>
-                                event.target.checked = false
-                            );
+                            cache.add(getContentUrl(contentId))
+                                .catch(() => event.target.checked = false);
                         } else {
                             cache.delete(getContentUrl(contentId));
                         }
