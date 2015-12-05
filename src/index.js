@@ -54,12 +54,14 @@ apiRouter.use((req, res) => (
 //
 // Site
 //
-var siteRouter = express.Router();
+const siteRouter = express.Router();
 
+const docType = '<!DOCTYPE html>';
 const render = (page, state) => (
     page.getTree(state)
         .then(node => mainView({ title: page.getTitle(state), state, body: node }))
         .then(treeToHTML)
+        .then(html => docType + html)
 );
 
 siteRouter.get('/', (req, res, next) => {
