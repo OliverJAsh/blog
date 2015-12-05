@@ -9,31 +9,30 @@
  * See: https://github.com/npm/npm/issues/3581
  */
 
-var sorted = require('sorted-object');
-var fs = require('fs');
-var path = require('path');
+import sorted from 'sorted-object';
+import fs from 'fs';
+import path from 'path';
 
 const forEach = (collection, mapFn) =>
     Object.keys(collection).forEach(key => mapFn(collection[key], key));
 
-
-function cleanModule(module) {
+const cleanModule = (module) => {
     // keep `resolve` properties for git dependencies, delete otherwise
     delete module.from;
     if (!(module.resolved
-                && (module.resolved.match(/^git(\+[a-z]+)?:\/\//) || module.resolved.match(/^https?:\/\/github.com\//)))) {
+          && (module.resolved.match(/^git(\+[a-z]+)?:\/\//)
+              || module.resolved.match(/^https?:\/\/github.com\//)))) {
         delete module.resolved;
     }
 
-    forEach(module.dependencies || [], function(mod, name) {
+    forEach(module.dependencies || [], (mod, name) => {
         cleanModule(mod, name);
     });
-}
-
+};
 
 console.log('- reading npm-shrinkwrap.json');
-var shrinkwrapPath = path.join(__dirname, 'npm-shrinkwrap.json');
-var shrinkwrap = require(shrinkwrapPath);
+const shrinkwrapPath = path.join(__dirname, 'npm-shrinkwrap.json');
+const shrinkwrap = require(shrinkwrapPath);
 
 console.log('- cleaning it');
 cleanModule(shrinkwrap, shrinkwrap.name);
