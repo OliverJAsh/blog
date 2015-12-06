@@ -2,20 +2,22 @@ import http from 'http';
 import express from 'express';
 import compression from 'compression';
 import treeToHTML from 'vdom-to-html';
+import dateFormat from 'dateformat';
+import slug from 'slug';
 
 import mainView from './main';
 
-import { getPageTemplate, getErrorPageTemplate } from './shared/helpers';
+import { getPageTemplate, getErrorPageTemplate, postRegExp } from './shared/helpers';
 
 const posts = [
-    { id: 'my-first-article', title: 'My First Article', body: '<p>Hello, World!</p>', date: new Date(2015, 0, 1) },
-    { id: 'my-second-article', title: 'My Second Article', body: '<p>Goodbye, World!</p>', date: new Date(2015, 0, 2) }
+    { title: 'My First Article', body: '<p>Hello, World!</p>', date: new Date(2015, 0, 1) },
+    { title: 'My Second Article', body: '<p>Goodbye, World!</p>', date: new Date(2015, 0, 2) }
 ];
 
-const postIdToPostMap = posts.reduce((accumulator, post) => {
-    accumulator[post.id] = post;
-    return accumulator;
-}, {});
+const getPostSlug = post => (
+    `${dateFormat(post.date, 'yyyy/mm/dd')}/${slug(post.title, { lower: true })}`
+);
+const zipPostsWithSlugs = posts => posts.map(post => [getPostSlug(post), post]);
 
 const app = express();
 
@@ -28,28 +30,6 @@ app.use('/js', express.static(`${__dirname}/public/js`, { maxAge: secondsInAYear
 app.use('/', express.static(`${__dirname}/public`));
 
 const sortPostsByDateDesc = a => a.sort((postA, postB) => postA.date < postB.date);
-
-//
-// Content API
-//
-var apiRouter = express.Router();
-
-apiRouter.get('/posts', (req, res) => (
-    res.send(sortPostsByDateDesc(posts))
-));
-
-apiRouter.get('/posts/:postId', (req, res, next) => {
-    const post = postIdToPostMap[req.params.postId];
-    if (post) {
-        res.send(post);
-    } else {
-        next();
-    }
-});
-
-apiRouter.use((req, res) => (
-    res.status(404).send({ message: http.STATUS_CODES[404] })
-));
 
 //
 // Site
@@ -65,20 +45,33 @@ const render = (page, state) => (
 );
 
 siteRouter.get('/', (req, res, next) => {
-    const state = sortPostsByDateDesc(posts);
-    const page = getPageTemplate(req.path);
-    render(page, state)
-        .then(html => res.send(html))
-        .catch(next);
-});
-
-siteRouter.get('/posts/:postId', (req, res, next) => {
-    const state = postIdToPostMap[req.params.postId];
-    if (state) {
+    const state = zipPostsWithSlugs(sortPostsByDateDesc(posts));
+    if (req.accepts('html')) {
         const page = getPageTemplate(req.path);
         render(page, state)
             .then(html => res.send(html))
             .catch(next);
+    } else if (req.accepts('json')) {
+        res.send(state);
+    } else {
+        res.sendStatus(400);
+    }
+});
+
+siteRouter.get(postRegExp, (req, res, next) => {
+    const slug = req.path.replace(/^\//, '');
+    const state = zipPostsWithSlugs(posts).find(postWithSlug => postWithSlug[0] === slug);
+    if (state) {
+        if (req.accepts('html')) {
+            const page = getPageTemplate(req.path);
+            render(page, state)
+                .then(html => res.send(html))
+                .catch(next);
+        } else if (req.accepts('json')) {
+            res.send(state);
+        } else {
+            res.sendStatus(400);
+        }
     } else {
         next();
     }
@@ -86,13 +79,17 @@ siteRouter.get('/posts/:postId', (req, res, next) => {
 
 siteRouter.use((req, res, next) => {
     const state = { statusCode: 404, message: http.STATUS_CODES[404] };
-    render(getErrorPageTemplate(), state)
-        .then(html => res.status(404).send(html))
-        .catch(next);
+    if (req.accepts('html')) {
+        render(getErrorPageTemplate(), state)
+            .then(html => res.status(404).send(html))
+            .catch(next);
+    } else if (req.accepts('json')) {
+        res.status(404).send(state);
+    } else {
+        res.status(404).send();
+    }
 });
 
-// Order matters
-app.use('/api', apiRouter);
 app.use('/', siteRouter);
 
 const server = app.listen(process.env.PORT || 8080, () => {

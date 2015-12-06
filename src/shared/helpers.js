@@ -2,36 +2,35 @@ import homeView from './views/home';
 import postView from './views/post';
 import errorView from './views/error';
 
-export const getContentUrl = (contentId) => `/api/${contentId}`;
-
 export const isBrowserWindow = typeof window !== 'undefined';
 
 const isDev = isBrowserWindow && window.location.hostname === 'localhost';
 export const canCache = isBrowserWindow && !!window.caches && (window.location.protocol === 'https:' || isDev);
-export const isContentCached = (contentId) =>
+export const isContentCached = (url) =>
     isBrowserWindow
         ? Promise.resolve(
             canCache
             && caches.open('content').then(cache => (
-                cache.match(getContentUrl(contentId)).then(response => !!response)
+                cache.match(url).then(response => !!response)
             ))
         )
         : Promise.resolve(false);
 
-const homeRegExp = /^\/$/;
-const postRegExp = /^\/posts\/(.*)$/;
+export const homeRegExp = /^\/$/;
+export const postRegExp = /^\/(\d{4})\/(\d{2})\/(\d{2})\/(.[^/]*)$/;
 
-const getHomePageTemplate = () => ({
-    contentId: 'posts',
+const getHomePageTemplate = (path) => ({
+    url: path,
     shouldCache: true,
     getTree: homeView,
     getTitle: () => ''
 });
 
 const getPostPageTemplate = (path) => ({
-    contentId: 'posts/' + path.match(postRegExp)[1],
+    url: path,
     getTree: postView,
-    getTitle: post => post.title
+    // https://github.com/eslint/eslint/issues/4620
+    getTitle: ([ postSlug, post ]) => post.title
 });
 
 export const getErrorPageTemplate = () => ({

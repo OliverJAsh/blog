@@ -1,21 +1,22 @@
 import h from 'virtual-dom/h';
 import exp from '../exp';
-import { getContentUrl, isContentCached, canCache } from '../helpers';
+import { isContentCached, canCache } from '../helpers';
 
-export default (post) => {
-    const contentId = `posts/${post.id}`;
-
-    return isContentCached(contentId).then(isCached => {
+export default ([ postSlug, post ]) => {
+    const url = `/${postSlug}`;
+    return isContentCached(url).then(isCached => {
         const cacheOption = exp(canCache) && (
             h('label', [
                 h('input', { type: 'checkbox', checked: isCached, onchange: (event) => (
                     caches.open('content').then((cache) => {
                         const shouldCache = event.target.checked;
                         if (shouldCache) {
-                            cache.add(getContentUrl(contentId))
+                            fetch(url, { headers: { 'Accept': 'application/json' } }).then(response => (
+                                cache.put(url, response)
+                            ))
                                 .catch(() => event.target.checked = false);
                         } else {
-                            cache.delete(getContentUrl(contentId));
+                            cache.delete(url);
                         }
                     })
                 ) }),
@@ -27,7 +28,7 @@ export default (post) => {
             h('header', [
                 cacheOption,
                 h('h2',
-                    h('a', { href: '/' + contentId }, post.title)
+                    h('a', { href: url }, post.title)
                 ),
                 h('p', new Date(post.date).toDateString())
             ]),

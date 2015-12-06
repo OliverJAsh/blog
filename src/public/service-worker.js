@@ -1,14 +1,16 @@
 /* eslint-env serviceworker */
 
+import { map, mapKeys, contains } from '../utils';
 import { getAssetFilename } from '../helpers';
+import { homeRegExp, postRegExp } from '../shared/helpers';
 
 const staticCacheName = 'static';
 const contentCacheName = 'content';
 
-const shellUrl = `${location.origin}/${getAssetFilename('shell.html')}`;
+const shellUrl = `${location.origin}${getAssetFilename('shell.html')}`;
 const shellAssetUrls = [
-    `${location.origin}/${getAssetFilename('js/main-bundle.js')}`,
-    `${location.origin}/${getAssetFilename('js/vendor-bundle.js')}`
+    `${location.origin}${getAssetFilename('js/main-bundle.js')}`,
+    `${location.origin}${getAssetFilename('js/vendor-bundle.js')}`
 ];
 const cacheUrls = shellAssetUrls.concat(shellUrl);
 
@@ -16,23 +18,6 @@ const expectedCaches = [
     staticCacheName,
     contentCacheName
 ];
-
-const map = (collection, mapFn) => (
-    Object.keys(collection).map(key => mapFn(collection[key], key))
-);
-const reduce = (collection, reduceFn, seed) => (
-    Object.keys(collection).reduce((acc, key) => {
-        const value = collection[key];
-        return reduceFn(acc, value, key);
-    }, seed)
-);
-const mapKeys = (collection, mapFn) => (
-    reduce(collection, (acc, value, key) => {
-        acc[mapFn(value, key)] = value;
-        return acc;
-    }, {})
-);
-const contains = (array, itemToFind) => array.some(item => item === itemToFind);
 
 const fetchAll = inputs => Promise.all(inputs.map(input => fetch(input)));
 
@@ -94,24 +79,34 @@ self.addEventListener('activate', (event) => {
     );
 });
 
+const doesRequestAcceptHtml = request => (
+    request.headers.get('Accept')
+        .split(',')
+        .some(type => type === 'text/html')
+);
+
 self.addEventListener('fetch', (event) => {
-    const requestURL = new URL(event.request.url);
+    const { request } = event;
+    const requestURL = new URL(request.url);
 
     // Serve shell if root request and pathname is / or /posts/:postId
     const isRootRequest = requestURL.origin === location.origin;
-    const homeOrArticlePageRegExp = new RegExp('^/(posts/.+)?$');
-    const shouldServeShell = isRootRequest && homeOrArticlePageRegExp.test(requestURL.pathname);
+    const shouldServeShell =
+        isRootRequest
+        && doesRequestAcceptHtml(request)
+        && (homeRegExp.test(requestURL.pathname)
+            || postRegExp.test(requestURL.pathname));
     if (shouldServeShell) {
         event.respondWith(
             caches.match(shellUrl).then(response => (
                 // Fallback to network in case the cache was deleted
-                response || fetch(event.request)
+                response || fetch(request)
             ))
         );
     } else {
         event.respondWith(
-            caches.match(event.request).then((response) => (
-                response || fetch(event.request)
+            caches.match(request).then((response) => (
+                response || fetch(request)
             ))
         );
     }
