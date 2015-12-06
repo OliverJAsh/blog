@@ -45,7 +45,7 @@ gulp.task('build-app', () => (
             vendor: [
                 'virtual-dom',
                 'vdom-virtualize',
-                'promise-polyfill',
+                'exports?global.Promise!es6-promise',
                 // https://github.com/webpack/webpack/issues/1717
                 'imports?this=>global!exports?global.fetch!whatwg-fetch'
             ]
@@ -56,8 +56,8 @@ gulp.task('build-app', () => (
         plugins: [
             new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor-bundle.js' }),
             new webpack.ProvidePlugin({
-                fetch: 'imports?this=>global!exports?global.fetch!whatwg-fetch',
-                Promise: 'promise-polyfill'
+                Promise: 'exports?global.Promise!es6-promise',
+                fetch: 'imports?this=>global!exports?global.fetch!whatwg-fetch'
             })
         ]
     })
