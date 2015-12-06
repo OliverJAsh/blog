@@ -1,6 +1,7 @@
 import homeView from './views/home';
 import postView from './views/post';
 import errorView from './views/error';
+import { homeRegExp, postRegExp } from '../shared/routing-reg-exps';
 
 export const isBrowserWindow = typeof window !== 'undefined';
 
@@ -15,9 +16,6 @@ export const isContentCached = (url) =>
             ))
         )
         : Promise.resolve(false);
-
-export const homeRegExp = /^\/$/;
-export const postRegExp = /^\/(\d{4})\/(\d{2})\/(\d{2})\/(.[^/]*)$/;
 
 const getHomePageTemplate = (path) => ({
     url: path,

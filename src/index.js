@@ -8,7 +8,8 @@ import fs from 'promised-io/fs';
 
 import mainView from './main';
 
-import { getPageTemplate, getErrorPageTemplate, postRegExp } from './shared/helpers';
+import { getPageTemplate, getErrorPageTemplate } from './shared/helpers';
+import { homeRegExp, postRegExp } from './shared/routing-reg-exps';
 
 const postsDir = `${__dirname}/posts`;
 const getPosts = () => (
@@ -57,7 +58,7 @@ const render = (page, state) => (
         .then(html => docType + html)
 );
 
-siteRouter.get('/', (req, res, next) => {
+siteRouter.get(homeRegExp, (req, res, next) => {
     getPosts().then(posts => {
         const state = zipPostsWithSlugs(sortPostsByDateDesc(posts));
         if (req.accepts('html')) {

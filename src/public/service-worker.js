@@ -2,7 +2,7 @@
 
 import { map, mapKeys, contains } from '../utils';
 import { getAssetFilename } from '../helpers';
-import { homeRegExp, postRegExp } from '../shared/helpers';
+import { homeRegExp, postRegExp } from '../shared/routing-reg-exps';
 
 const staticCacheName = 'static';
 const contentCacheName = 'content';
