@@ -28,9 +28,9 @@ const getHomePageTemplate = (path) => ({
 
 const getPostPageTemplate = (path) => ({
     url: path,
-    getTree: postView,
+    getTree: post => postView([ path.replace(/^\//, ''), post ]),
     // https://github.com/eslint/eslint/issues/4620
-    getTitle: ([ postSlug, post ]) => post.title
+    getTitle: post => post.title
 });
 
 export const getErrorPageTemplate = () => ({

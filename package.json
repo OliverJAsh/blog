@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "compile": "cd src && babel *.js --out-dir ../target && babel shared --out-dir ../target/shared",
+    "compile": "cd src && babel *.js --out-dir ../target && babel shared --out-dir ../target/shared && babel posts --out-dir ../target/posts",
     "start": "npm run compile && node target/",
     "build": "gulp build",
     "clean": "rm -rf rev-manifest.json && rm -rf target",
@@ -26,6 +26,7 @@
     "imports-loader": "^0.6.5",
     "json-loader": "^0.5.4",
     "promise-polyfill": "^2.1.0",
+    "promised-io": "^0.3.5",
     "slug": "^0.9.1",
     "sorted-object": "^1.0.0",
     "uglify-js": "^2.6.1",

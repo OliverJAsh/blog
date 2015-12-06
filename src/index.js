@@ -4,19 +4,32 @@ import compression from 'compression';
 import treeToHTML from 'vdom-to-html';
 import dateFormat from 'dateformat';
 import slug from 'slug';
+import fs from 'promised-io/fs';
 
 import mainView from './main';
 
 import { getPageTemplate, getErrorPageTemplate, postRegExp } from './shared/helpers';
 
-const posts = [
-    { title: 'My First Article', body: '<p>Hello, World!</p>', date: new Date(2015, 0, 1) },
-    { title: 'My Second Article', body: '<p>Goodbye, World!</p>', date: new Date(2015, 0, 2) }
-];
+const postsDir = `${__dirname}/posts`;
+const getPosts = () => (
+    fs.readdir(postsDir)
+        .then(fileNames => fileNames.map(fileName => require(`${postsDir}/${fileName}`).default))
+);
+const getPost = (year, month, date, title) => {
+    let post;
+    const fileName = `${year}-${month}-${date}-${title}`;
+    try {
+        post = require(`${postsDir}/${fileName}`);
+    } catch(error) {
+        console.info(`Post not found: ${fileName}`);
+    }
+    return post && post.default;
+};
 
 const getPostSlug = post => (
     `${dateFormat(post.date, 'yyyy/mm/dd')}/${slug(post.title, { lower: true })}`
 );
+// We do this on the server-side to reduce client-side JS
 const zipPostsWithSlugs = posts => posts.map(post => [getPostSlug(post), post]);
 
 const app = express();
@@ -45,23 +58,8 @@ const render = (page, state) => (
 );
 
 siteRouter.get('/', (req, res, next) => {
-    const state = zipPostsWithSlugs(sortPostsByDateDesc(posts));
-    if (req.accepts('html')) {
-        const page = getPageTemplate(req.path);
-        render(page, state)
-            .then(html => res.send(html))
-            .catch(next);
-    } else if (req.accepts('json')) {
-        res.send(state);
-    } else {
-        res.sendStatus(400);
-    }
-});
-
-siteRouter.get(postRegExp, (req, res, next) => {
-    const slug = req.path.replace(/^\//, '');
-    const state = zipPostsWithSlugs(posts).find(postWithSlug => postWithSlug[0] === slug);
-    if (state) {
+    getPosts().then(posts => {
+        const state = zipPostsWithSlugs(sortPostsByDateDesc(posts));
         if (req.accepts('html')) {
             const page = getPageTemplate(req.path);
             render(page, state)
@@ -69,6 +67,23 @@ siteRouter.get(postRegExp, (req, res, next) => {
                 .catch(next);
         } else if (req.accepts('json')) {
             res.send(state);
+        } else {
+            res.sendStatus(400);
+        }
+    });
+});
+
+siteRouter.get(postRegExp, (req, res, next) => {
+    const { 0: year, 1: month, 2: date, 3: title } = req.params;
+    const post = getPost(year, month, date, title);
+    if (post) {
+        if (req.accepts('html')) {
+            const page = getPageTemplate(req.path);
+            render(page, post)
+                .then(html => res.send(html))
+                .catch(next);
+        } else if (req.accepts('json')) {
+            res.send(post);
         } else {
             res.sendStatus(400);
         }

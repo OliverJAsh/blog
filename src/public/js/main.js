@@ -54,7 +54,7 @@ const handlePageState = (pageTemplate) => {
             .then(cacheResponse => {
                 if (cacheResponse) {
                     return cacheResponse.clone().json()
-                        .then((state) => ({ source: 'cache', page: createPage(pageTemplate, state) }));
+                        .then(state => ({ source: 'cache', page: createPage(pageTemplate, state) }));
                 } else {
                     return networkPromise
                         .then(networkResponse => {

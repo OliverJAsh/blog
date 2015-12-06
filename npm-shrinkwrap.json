@@ -2728,6 +2728,9 @@
     "promise-polyfill": {
       "version": "2.1.0"
     },
+    "promised-io": {
+      "version": "0.3.5"
+    },
     "replace-ext": {
       "version": "0.0.1"
     },
