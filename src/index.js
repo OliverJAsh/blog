@@ -118,8 +118,8 @@ const onListen = server => {
 };
 
 if (isDev) {
-    const server = http.createServer(app);
-    server.listen(8080, () => onListen(server));
+    const httpServer = http.createServer(app);
+    httpServer.listen(8080, () => onListen(httpServer));
 } else {
     const path = '/etc/letsencrypt/live/oliverjash.tk';
     const key = fs.readFileSync(`${path}/privkey.pem`);
@@ -127,6 +127,17 @@ if (isDev) {
     const ca = fs.readFileSync(`${path}/chain.pem`);
     const credentials = { key, cert, ca };
 
-    const server = https.createServer(credentials, app);
-    server.listen(443, () => onListen(server));
+    const redirectApp = express();
+    redirectApp.use((req, res, next) => {
+        if (req.secure) {
+            next();
+        } else {
+            return res.redirect(`https://${req.get('host')}${req.url}`);
+        }
+    });
+
+    const httpServer = http.createServer(redirectApp);
+    httpServer.listen(80, () => onListen(httpServer));
+    const httpsServer = https.createServer(credentials, app);
+    httpsServer.listen(443, () => onListen(httpsServer));
 }
