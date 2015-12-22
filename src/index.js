@@ -127,16 +127,7 @@ if (isDev) {
     const ca = fs.readFileSync(`${path}/chain.pem`);
     const credentials = { key, cert, ca };
 
-    const redirectApp = express();
-    redirectApp.use((req, res, next) => {
-        if (req.secure) {
-            next();
-        } else {
-            return res.redirect(`https://${req.get('host')}${req.url}`);
-        }
-    });
-
-    const httpServer = http.createServer(redirectApp);
+    const httpServer = http.createServer(app);
     httpServer.listen(80, () => onListen(httpServer));
     const httpsServer = https.createServer(credentials, app);
     httpsServer.listen(443, () => onListen(httpsServer));
