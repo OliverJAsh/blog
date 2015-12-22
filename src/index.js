@@ -1,10 +1,12 @@
 import http from 'http';
+import https from 'https';
+import fs from 'fs';
 import express from 'express';
 import compression from 'compression';
 import treeToHTML from 'vdom-to-html';
 import dateFormat from 'dateformat';
 import slug from 'slug';
-import fs from 'promised-io/fs';
+import fsP from 'promised-io/fs';
 
 import mainView from './main';
 
@@ -13,7 +15,7 @@ import { homeRegExp, postRegExp } from './shared/routing-reg-exps';
 
 const postsDir = `${__dirname}/posts`;
 const getPosts = () => (
-    fs.readdir(postsDir)
+    fsP.readdir(postsDir)
         .then(fileNames => fileNames.map(fileName => require(`${postsDir}/${fileName}`).default))
 );
 const getPost = (year, month, date, title) => {
@@ -108,8 +110,23 @@ siteRouter.use((req, res, next) => {
 
 app.use('/', siteRouter);
 
-const server = app.listen(process.env.PORT || 8080, () => {
+const isDev = app.settings.env === 'development';
+const onListen = server => {
     const { port } = server.address();
 
     console.log(`Server running on port ${port}`);
-});
+};
+
+if (isDev) {
+    const server = http.createServer(app);
+    server.listen(8080, () => onListen(server));
+} else {
+    const path = '/etc/letsencrypt/live/oliverjash.tk';
+    const key = fs.readFileSync(`${path}/privkey.pem`);
+    const cert = fs.readFileSync(`${path}/fullchain.pem`);
+    const ca = fs.readFileSync(`${path}/chain.pem`);
+    const credentials = { key, cert, ca };
+
+    const server = https.createServer(credentials, app);
+    server.listen(443, () => onListen(server));
+}
