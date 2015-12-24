@@ -1,7 +1,7 @@
 import homeView from './views/home';
 import postView from './views/post';
 import errorView from './views/error';
-import { homeRegExp, postRegExp } from '../shared/routing-reg-exps';
+import { homeRegExp, postRegExp } from './routing-reg-exps';
 
 export const isBrowserWindow = typeof window !== 'undefined';
 
