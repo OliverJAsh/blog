@@ -88,4 +88,9 @@ gulp.task('build-shell', ['build-app'], () => {
         .pipe(gulp.dest('./target'));
 });
 
-gulp.task('build', ['build-app', 'build-shell', 'build-service-worker']);
+gulp.task('build-images', () => {
+    return gulp.src('./src/public/images/**')
+        .pipe(gulp.dest('./target/public/images'));
+});
+
+gulp.task('build', ['build-app', 'build-shell', 'build-service-worker', 'build-images']);
