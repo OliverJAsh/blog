@@ -7,6 +7,7 @@ import treeToHTML from 'vdom-to-html';
 import dateFormat from 'dateformat';
 import slug from 'slug';
 import fsP from 'promised-io/fs';
+import sortBy from 'lodash/collection/sortBy';
 
 import mainView from './main';
 
@@ -45,7 +46,7 @@ app.use('/js', express.static(`${__dirname}/public/js`, { maxAge: secondsInAYear
 // We don't want the service worker to have a cache max age
 app.use('/', express.static(`${__dirname}/public`));
 
-const sortPostsByDateDesc = a => a.sort((postA, postB) => postA.date < postB.date);
+const sortPostsByDateDesc = posts => sortBy(posts, post => post.date).reverse();
 
 //
 // Site
