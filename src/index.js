@@ -42,9 +42,15 @@ app.use(compression());
 
 // Order matters
 const secondsInAYear = 365 * 24 * 60 * 60;
-app.use('/js', express.static(`${__dirname}/public/js`, { maxAge: secondsInAYear * 1000 }));
+const publicDir = `${__dirname}/public`;
 // We don't want the service worker to have a cache max age
-app.use('/', express.static(`${__dirname}/public`));
+app.get('/service-worker.js', (req, res, next) => {
+    res.set('Content-Type', 'application/javascript');
+    fs.createReadStream(`${publicDir}/service-worker.js`)
+        .on('error', next)
+        .pipe(res);
+});
+app.use('/', express.static(publicDir, { maxAge: secondsInAYear * 1000 }));
 
 const sortPostsByDateDesc = posts => sortBy(posts, post => post.date).reverse();
 
