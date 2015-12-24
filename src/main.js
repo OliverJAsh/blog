@@ -28,7 +28,7 @@ export default ({ title, state, body }) => (
             // Execute JS async which fetches model data then renders when
             // DOMContentLoaded
             h('script', { innerHTML: getDownloadScriptsScript() }),
-            h('style', 'pre { overflow-x: auto; }')
+            h('style', 'pre { overflow-x: auto; } img { max-width: 100%; }')
         ]),
         h('body', [
             h('h1',
