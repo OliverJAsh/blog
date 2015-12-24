@@ -127,7 +127,7 @@ if (isDev) {
     const httpServer = http.createServer(app);
     httpServer.listen(8080, () => onListen(httpServer));
 } else {
-    const path = '/etc/letsencrypt/live/oliverjash.tk';
+    const path = '/etc/letsencrypt/live/oliverjash.me';
     const key = fs.readFileSync(`${path}/privkey.pem`);
     const cert = fs.readFileSync(`${path}/fullchain.pem`);
     const ca = fs.readFileSync(`${path}/chain.pem`);
