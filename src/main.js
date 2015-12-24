@@ -27,7 +27,8 @@ export default ({ title, state, body }) => (
             h('meta', { name: 'viewport', content: 'width=device-width, initial-scale=1' }),
             // Execute JS async which fetches model data then renders when
             // DOMContentLoaded
-            h('script', { innerHTML: getDownloadScriptsScript() })
+            h('script', { innerHTML: getDownloadScriptsScript() }),
+            h('style', 'pre { overflow-x: auto; }')
         ]),
         h('body', [
             h('h1',
