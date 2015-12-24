@@ -9,8 +9,7 @@ export default (posts) => {
             h('li', [
                 h('h2', h('a', { href: url }, post.title)),
                 exp(isCached) && h('p', h('strong', 'Available offline')),
-                h('p', new Date(post.date).toDateString()),
-                h('div', { innerHTML: post.body })
+                h('p', new Date(post.date).toDateString())
             ])
         ));
     }));
