@@ -11,7 +11,7 @@ import fsP from 'promised-io/fs';
 import mainView from './main';
 
 import { getPageTemplate, getErrorPageTemplate } from './shared/helpers';
-import { homeRegExp, postRegExp } from './shared/routing-reg-exps';
+import { homeRegExp, postRegExp, postPrefixRegExp } from './shared/routing-reg-exps';
 
 const postsDir = `${__dirname}/posts`;
 const getPosts = () => (
@@ -93,6 +93,11 @@ siteRouter.get(postRegExp, (req, res, next) => {
     } else {
         next();
     }
+});
+
+siteRouter.get(new RegExp(postPrefixRegExp.source + /\.html$/.source), (req, res) => {
+    const newPath = req.path.replace(/\.html$/, '');
+    res.redirect(301, newPath);
 });
 
 siteRouter.use((req, res, next) => {
