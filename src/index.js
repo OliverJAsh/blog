@@ -71,13 +71,16 @@ const render = (page, state) => (
 app.get(homeRegExp, (req, res, next) => {
     getPosts().then(posts => {
         const state = zipPostsWithSlugs(sortPostsByDateDesc(posts));
-        if (req.accepts('html')) {
-            const page = getPageTemplate(req.path);
-            render(page, state)
-                .then(html => res.send(html))
-                .catch(next);
-        } else if (req.accepts('json')) {
-            res.send(state);
+        if (req.accepts(['html', 'json'])) {
+            res.set('Vary', 'Accept');
+            if (req.accepts('html')) {
+                const page = getPageTemplate(req.path);
+                render(page, state)
+                    .then(html => res.send(html))
+                    .catch(next);
+            } else if (req.accepts('json')) {
+                res.send(state);
+            }
         } else {
             res.sendStatus(400);
         }
@@ -88,13 +91,16 @@ app.get(postRegExp, (req, res, next) => {
     const { 0: year, 1: month, 2: date, 3: title } = req.params;
     const post = getPost(year, month, date, title);
     if (post) {
-        if (req.accepts('html')) {
-            const page = getPageTemplate(req.path);
-            render(page, post)
-                .then(html => res.send(html))
-                .catch(next);
-        } else if (req.accepts('json')) {
-            res.send(post);
+        if (req.accepts(['html', 'json'])) {
+            res.set('Vary', 'Accept');
+            if (req.accepts('html')) {
+                const page = getPageTemplate(req.path);
+                render(page, post)
+                    .then(html => res.send(html))
+                    .catch(next);
+            } else if (req.accepts('json')) {
+                res.send(post);
+            }
         } else {
             res.sendStatus(400);
         }
