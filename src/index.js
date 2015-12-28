@@ -8,11 +8,17 @@ import dateFormat from 'dateformat';
 import slug from 'slug';
 import fsP from 'promised-io/fs';
 import sortBy from 'lodash/collection/sortBy';
+import log from './log';
 
 import mainView from './main';
 
 import { getPageTemplate, getErrorPageTemplate } from './shared/helpers';
 import { homeRegExp, postRegExp, postPrefixRegExp } from './shared/routing-reg-exps';
+
+process.on('uncaughtException', error => {
+    log(error.stack);
+    process.exit(1);
+});
 
 const postsDir = `${__dirname}/posts`;
 const getPosts = () => (
@@ -25,7 +31,7 @@ const getPost = (year, month, date, title) => {
     try {
         post = require(`${postsDir}/${fileName}`);
     } catch(error) {
-        console.info(`Post not found: ${fileName}`);
+        log(`Post not found: ${fileName}`);
     }
     return post && post.default;
 };
@@ -54,11 +60,6 @@ app.use('/', express.static(publicDir, { maxAge: secondsInAYear * 1000 }));
 
 const sortPostsByDateDesc = posts => sortBy(posts, post => post.date).reverse();
 
-//
-// Site
-//
-const siteRouter = express.Router();
-
 const docType = '<!DOCTYPE html>';
 const render = (page, state) => (
     page.getTree(state)
@@ -67,7 +68,7 @@ const render = (page, state) => (
         .then(html => docType + html)
 );
 
-siteRouter.get(homeRegExp, (req, res, next) => {
+app.get(homeRegExp, (req, res, next) => {
     getPosts().then(posts => {
         const state = zipPostsWithSlugs(sortPostsByDateDesc(posts));
         if (req.accepts('html')) {
@@ -83,7 +84,7 @@ siteRouter.get(homeRegExp, (req, res, next) => {
     });
 });
 
-siteRouter.get(postRegExp, (req, res, next) => {
+app.get(postRegExp, (req, res, next) => {
     const { 0: year, 1: month, 2: date, 3: title } = req.params;
     const post = getPost(year, month, date, title);
     if (post) {
@@ -102,12 +103,12 @@ siteRouter.get(postRegExp, (req, res, next) => {
     }
 });
 
-siteRouter.get(new RegExp(postPrefixRegExp.source + /\.html$/.source), (req, res) => {
+app.get(new RegExp(postPrefixRegExp.source + /\.html$/.source), (req, res) => {
     const newPath = req.path.replace(/\.html$/, '');
     res.redirect(301, newPath);
 });
 
-siteRouter.use((req, res, next) => {
+app.use((req, res, next) => {
     const state = { statusCode: 404, message: http.STATUS_CODES[404] };
     if (req.accepts('html')) {
         render(getErrorPageTemplate(), state)
@@ -120,13 +121,16 @@ siteRouter.use((req, res, next) => {
     }
 });
 
-app.use('/', siteRouter);
+app.use((error, req, res, next) => {
+    log(error.stack);
+    res.sendStatus(500);
+});
 
 const isDev = app.settings.env === 'development';
 const onListen = server => {
     const { port } = server.address();
 
-    console.log(`Server running on port ${port}`);
+    log(`Server running on port ${port}`);
 };
 
 if (isDev) {

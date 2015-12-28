@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "compile": "cd src && babel *.js --out-dir ../target && babel shared --out-dir ../target/shared && babel posts --out-dir ../target/posts",
-    "start": "npm run compile && node target/",
+    "start": "npm run compile && node target/ >> log.txt",
     "build": "gulp build",
     "clean": "rm -rf rev-manifest.json && rm -rf target",
     "lint": "eslint ."
