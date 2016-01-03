@@ -8,6 +8,7 @@ import dateFormat from 'dateformat';
 import slug from 'slug';
 import fsP from 'promised-io/fs';
 import sortBy from 'lodash/collection/sortBy';
+import pick from 'lodash/object/pick';
 import log from './log';
 
 import mainView from './main';
@@ -70,7 +71,10 @@ const render = (page, state) => (
 
 app.get(homeRegExp, (req, res, next) => {
     getPosts().then(posts => {
-        const state = zipPostsWithSlugs(sortPostsByDateDesc(posts));
+        // Trim state to reduce page size
+        const state = zipPostsWithSlugs(
+            sortPostsByDateDesc(posts).map(post => pick(post, 'title', 'date'))
+        );
         if (req.accepts(['html', 'json'])) {
             res.set('Vary', 'Accept');
             if (req.accepts('html')) {
