@@ -9,9 +9,9 @@ import slug from 'slug';
 import fsP from 'promised-io/fs';
 import sortBy from 'lodash/collection/sortBy';
 import pick from 'lodash/object/pick';
-import log from './log';
 
 import mainView from './main';
+import { log } from './helpers';
 
 import { getPageTemplate, getErrorPageTemplate } from './shared/helpers';
 import { homeRegExp, postRegExp, postPrefixRegExp } from './shared/routing-reg-exps';

@@ -5,3 +5,7 @@ export const getAssetMap = () => {
 };
 
 export const getAssetFilename = assetName => `/${getAssetMap()[assetName]}`;
+
+export const log = message => {
+    console.log(`${new Date().toISOString()} ${message}`);
+};
