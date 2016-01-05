@@ -31,9 +31,9 @@ export default ({ title, body }) => (
             h('style', 'pre { overflow-x: auto; } img { max-width: 100%; }')
         ]),
         h('body', [
-            h('h1',
+            h('h1', [
                 h('a', { href: '/' }, 'Blog')
-            ),
+            ]),
             h('div#root', [ body ]),
             h('script', `window.assetMap = ${JSON.stringify(getAssetMap())}`)
         ])
