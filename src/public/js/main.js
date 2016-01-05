@@ -2,7 +2,8 @@ import diff from 'virtual-dom/diff';
 import patch from 'virtual-dom/patch';
 import domToVdom from 'vdom-virtualize';
 
-import { isContentCached, getPageTemplate, getErrorPageTemplate, getPageTitle, canCache } from '../../shared/helpers';
+import { isContentCached, getHomePageTemplate, getPostPageTemplate, getErrorPageTemplate, getPageTitle, canCache } from '../../shared/helpers';
+import { homeRegExp, postRegExp } from '../../shared/routing-reg-exps';
 
 import waitForDomReady from './wait-for-dom-ready';
 
@@ -112,6 +113,15 @@ const handlePageState = (pageTemplate) => {
 //
 // Routing
 //
+
+const getPageTemplate = (path) => {
+    if (homeRegExp.test(path)) {
+        return getHomePageTemplate(path);
+    }
+    else if (postRegExp.test(path)) {
+        return getPostPageTemplate(path);
+    }
+};
 
 const page = getPageTemplate(location.pathname);
 handlePageState(page);

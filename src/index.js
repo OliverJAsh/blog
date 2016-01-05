@@ -13,7 +13,7 @@ import pick from 'lodash/object/pick';
 import mainView from './main';
 import { log } from './helpers';
 
-import { getPageTemplate, getErrorPageTemplate } from './shared/helpers';
+import { getHomePageTemplate, getPostPageTemplate, getErrorPageTemplate } from './shared/helpers';
 import { homeRegExp, postRegExp, postPrefixRegExp } from './shared/routing-reg-exps';
 
 process.on('uncaughtException', error => {
@@ -129,7 +129,7 @@ siteRouter.use((req, res, next) => {
 
 siteRouter.get(homeRegExp, (req, res, next) => {
     getHomeState().then(state => {
-        const page = getPageTemplate(req.path);
+        const page = getHomePageTemplate(req.path);
         render(page, state)
             .then(html => res.send(html))
             .catch(next);
@@ -140,7 +140,7 @@ siteRouter.get(postRegExp, (req, res, next) => {
     const { 0: year, 1: month, 2: date, 3: title } = req.params;
     const post = getPost(year, month, date, title);
     if (post) {
-        const page = getPageTemplate(req.path);
+        const page = getPostPageTemplate(req.path);
         render(page, post)
             .then(html => res.send(html))
             .catch(next);

@@ -1,7 +1,6 @@
 import homeView from './views/home';
 import postView from './views/post';
 import errorView from './views/error';
-import { homeRegExp, postRegExp } from './routing-reg-exps';
 
 export const isBrowserWindow = typeof window !== 'undefined';
 
@@ -17,14 +16,14 @@ export const isContentCached = (url) =>
         )
         : Promise.resolve(false);
 
-const getHomePageTemplate = (path) => ({
+export const getHomePageTemplate = (path) => ({
     url: path,
     shouldCache: true,
     getTree: homeView,
     getTitle: () => ''
 });
 
-const getPostPageTemplate = (path) => ({
+export const getPostPageTemplate = (path) => ({
     url: path,
     getTree: post => postView([ path.replace(/^\//, ''), post ]),
     // https://github.com/eslint/eslint/issues/4620
@@ -35,14 +34,5 @@ export const getErrorPageTemplate = () => ({
     getTree: errorView,
     getTitle: state => state.message
 });
-
-export const getPageTemplate = (path) => {
-    if (homeRegExp.test(path)) {
-        return getHomePageTemplate(path);
-    }
-    else if (postRegExp.test(path)) {
-        return getPostPageTemplate(path);
-    }
-};
 
 export const getPageTitle = (title) => `${title ? (title + ' – ') : ''}Blog`;
