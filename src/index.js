@@ -53,7 +53,9 @@ const secondsInAYear = 365 * 24 * 60 * 60;
 const publicDir = `${__dirname}/public`;
 // We don't want the service worker to have a cache max age
 app.get('/service-worker.js', (req, res, next) => {
-    res.set('Content-Type', 'application/javascript');
+    res
+        .set('Content-Type', 'application/javascript')
+        .set('Cache-Control', 'no-store');
     fs.createReadStream(`${publicDir}/service-worker.js`)
         .on('error', next)
         .pipe(res);
