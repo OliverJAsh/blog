@@ -44,7 +44,7 @@ const createPage = (pageTemplate, state) => ({
 // content on screen and then revalidate the cache.
 // This function has side effects.
 const handlePageState = (pageTemplate) => {
-    const url = pageTemplate.url;
+    const url = `/api${pageTemplate.url}`;
     const networkPromise = fetch(url, { headers: { 'Accept': 'application/json' } });
     const cachePromise = Promise.resolve(canCache && caches.match(url));
 

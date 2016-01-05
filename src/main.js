@@ -1,5 +1,4 @@
 import h from 'virtual-dom/h';
-import exp from './shared/exp';
 import { getAssetMap, getAssetFilename } from './helpers';
 import { getPageTitle } from './shared/helpers';
 import UglifyJS from 'uglify-js';

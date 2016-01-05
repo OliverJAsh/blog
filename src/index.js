@@ -45,9 +45,10 @@ const zipPostsWithSlugs = posts => posts.map(post => [getPostSlug(post), post]);
 
 const app = express();
 
+// Remember: order matters!
+
 app.use(compression());
 
-// Order matters
 const secondsInTenYears = 10 * 365 * 24 * 60 * 60;
 const publicDir = `${__dirname}/public`;
 // We don't want the service worker to have a cache max age
@@ -69,67 +70,101 @@ const render = (page, state) => (
         .then(html => docType + html)
 );
 
-app.get(homeRegExp, (req, res, next) => {
-    getPosts().then(posts => {
+const apiRouter = express.Router();
+const siteRouter = express.Router();
+
+const getHomeState = () => (
+    getPosts().then(posts => (
         // Trim state to reduce page size
-        const state = zipPostsWithSlugs(
+        zipPostsWithSlugs(
             sortPostsByDateDesc(posts).map(post => pick(post, 'title', 'date'))
-        );
-        if (req.accepts(['html', 'json'])) {
-            res.set('Vary', 'Accept');
-            if (req.accepts('html')) {
-                const page = getPageTemplate(req.path);
-                render(page, state)
-                    .then(html => res.send(html))
-                    .catch(next);
-            } else if (req.accepts('json')) {
-                res.send(state);
-            }
-        } else {
-            res.sendStatus(400);
-        }
+        )
+    ))
+);
+
+//
+// API
+//
+
+apiRouter.use((req, res, next) => {
+    if (req.accepts('json')) {
+        next();
+    } else {
+        res.sendStatus(400);
+    }
+});
+
+apiRouter.get(homeRegExp, (req, res) => {
+    getHomeState().then(state => {
+        res.send(state);
     });
 });
 
-app.get(postRegExp, (req, res, next) => {
+apiRouter.get(postRegExp, (req, res, next) => {
     const { 0: year, 1: month, 2: date, 3: title } = req.params;
     const post = getPost(year, month, date, title);
     if (post) {
-        if (req.accepts(['html', 'json'])) {
-            res.set('Vary', 'Accept');
-            if (req.accepts('html')) {
-                const page = getPageTemplate(req.path);
-                render(page, post)
-                    .then(html => res.send(html))
-                    .catch(next);
-            } else if (req.accepts('json')) {
-                res.send(post);
-            }
-        } else {
-            res.sendStatus(400);
-        }
+        res.send(post);
     } else {
         next();
     }
 });
 
-app.get(new RegExp(postPrefixRegExp.source + /\.html$/.source), (req, res) => {
+apiRouter.use((req, res, next) => {
+    const state = { statusCode: 404, message: http.STATUS_CODES[404] };
+    res.status(404).send(state);
+});
+
+//
+// Site
+//
+
+siteRouter.use((req, res, next) => {
+    if (req.accepts('html')) {
+        next();
+    } else {
+        res.sendStatus(400);
+    }
+});
+
+siteRouter.get(homeRegExp, (req, res, next) => {
+    getHomeState().then(state => {
+        const page = getPageTemplate(req.path);
+        render(page, state)
+            .then(html => res.send(html))
+            .catch(next);
+    });
+});
+
+siteRouter.get(postRegExp, (req, res, next) => {
+    const { 0: year, 1: month, 2: date, 3: title } = req.params;
+    const post = getPost(year, month, date, title);
+    if (post) {
+        const page = getPageTemplate(req.path);
+        render(page, post)
+            .then(html => res.send(html))
+            .catch(next);
+    } else {
+        next();
+    }
+});
+
+siteRouter.get(new RegExp(postPrefixRegExp.source + /\.html$/.source), (req, res) => {
     const newPath = req.path.replace(/\.html$/, '');
     res.redirect(301, newPath);
 });
 
-app.use((req, res, next) => {
+siteRouter.use((req, res, next) => {
     const state = { statusCode: 404, message: http.STATUS_CODES[404] };
-    if (req.accepts('html')) {
-        render(getErrorPageTemplate(), state)
-            .then(html => res.status(404).send(html))
-            .catch(next);
-    } else if (req.accepts('json')) {
-        res.status(404).send(state);
-    } else {
-        res.status(404).send();
-    }
+    render(getErrorPageTemplate(), state)
+        .then(html => res.status(404).send(html))
+        .catch(next);
 });
+
+app.use('/api', apiRouter);
+app.use('/', siteRouter);
+
+app.use((req, res) => res.status(404).send());
 
 app.use((error, req, res, next) => {
     log(error.stack);

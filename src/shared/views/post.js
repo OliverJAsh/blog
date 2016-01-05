@@ -3,20 +3,21 @@ import exp from '../exp';
 import { isContentCached, canCache } from '../helpers';
 
 export default ([ postSlug, post ]) => {
-    const url = `/${postSlug}`;
-    return isContentCached(url).then(isCached => {
+    const apiUrl = `/api/${postSlug}`;
+    const siteUrl = `/${postSlug}`;
+    return isContentCached(apiUrl).then(isCached => {
         const cacheOption = exp(canCache) && (
             h('label', [
                 h('input', { type: 'checkbox', checked: isCached, onchange: (event) => (
                     caches.open('content').then((cache) => {
                         const shouldCache = event.target.checked;
                         if (shouldCache) {
-                            fetch(url, { headers: { 'Accept': 'application/json' } }).then(response => (
-                                cache.put(url, response)
+                            fetch(apiUrl, { headers: { 'Accept': 'application/json' } }).then(response => (
+                                cache.put(apiUrl, response)
                             ))
                                 .catch(() => event.target.checked = false);
                         } else {
-                            cache.delete(url);
+                            cache.delete(apiUrl);
                         }
                     })
                 ) }),
@@ -28,7 +29,7 @@ export default ([ postSlug, post ]) => {
             h('header', [
                 cacheOption,
                 h('h2',
-                    h('a', { href: url }, post.title)
+                    h('a', { href: siteUrl }, post.title)
                 ),
                 h('p', new Date(post.date).toDateString())
             ]),
