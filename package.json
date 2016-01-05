@@ -4,7 +4,7 @@
     "compile": "cd src && babel *.js --out-dir ../target && babel shared --out-dir ../target/shared && babel posts --out-dir ../target/posts",
     "start": "npm run compile && node target/ >> log.txt",
     "build": "gulp build",
-    "clean": "rm -rf rev-manifest.json && rm -rf target",
+    "clean": "mkdir -p target-backup/public && cp -r target/public/* target-backup/public && rm -rf target && mkdir -p target/public && cp -r target-backup/public/* target/public && rm -rf target-backup",
     "lint": "eslint ."
   },
   "dependencies": {

@@ -88,6 +88,8 @@ const getHomeState = () => (
 // API
 //
 
+// We cache pages but we must ensure old assets are available
+
 apiRouter.use((req, res, next) => {
     if (req.accepts('json')) {
         next();
