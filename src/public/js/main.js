@@ -86,20 +86,9 @@ const handlePageState = (pageTemplate) => {
         )
     );
 
-    const renders = () => {
-        const stateNode = document.querySelector('#state');
-        const currentState = stateNode && JSON.parse(stateNode.text);
-        if (currentState) {
-            // Re-render to enhance
-            // Duck type error page
-            const page = currentState.statusCode && currentState.statusCode !== 200
-                ? createPage(getErrorPageTemplate(), currentState)
-                : createPage(pageTemplate, currentState);
-            return updateContent({ source: 'current-state', page });
-        } else {
-            return initialRender().then(conditionalNetworkRender);
-        }
-    };
+    const renders = () => (
+        initialRender().then(conditionalNetworkRender)
+    );
 
     const shouldCachePromise = Promise.resolve(
         canCache &&

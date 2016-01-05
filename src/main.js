@@ -20,7 +20,7 @@ const getDownloadScriptsScript = () => UglifyJS.minify(
     }
 ).code;
 
-export default ({ title, state, body }) => (
+export default ({ title, body }) => (
     h('html', [
         h('head', [
             h('title', getPageTitle(title)),
@@ -35,11 +35,6 @@ export default ({ title, state, body }) => (
                 h('a', { href: '/' }, 'Blog')
             ),
             h('div#root', [ body ]),
-            exp(state) && h(
-                'script',
-                { id: 'state', type: 'application/json' },
-                JSON.stringify(state)
-            ),
             h('script', `window.assetMap = ${JSON.stringify(getAssetMap())}`)
         ])
     ])

@@ -64,7 +64,7 @@ const sortPostsByDateDesc = posts => sortBy(posts, post => post.date).reverse();
 const docType = '<!DOCTYPE html>';
 const render = (page, state) => (
     page.getTree(state)
-        .then(node => mainView({ title: page.getTitle(state), state, body: node }))
+        .then(node => mainView({ title: page.getTitle(state), body: node }))
         .then(treeToHTML)
         .then(html => docType + html)
 );
