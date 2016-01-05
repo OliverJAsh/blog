@@ -96,7 +96,7 @@ apiRouter.use((req, res, next) => {
 
 apiRouter.get(homeRegExp, (req, res) => {
     getHomeState().then(state => {
-        res.send(state);
+        res.set('Cache-Control', 'public, max-age=60').send(state);
     });
 });
 
@@ -104,7 +104,7 @@ apiRouter.get(postRegExp, (req, res, next) => {
     const { 0: year, 1: month, 2: date, 3: title } = req.params;
     const post = getPost(year, month, date, title);
     if (post) {
-        res.send(post);
+        res.set('Cache-Control', 'public, max-age=60').send(post);
     } else {
         next();
     }
@@ -131,7 +131,7 @@ siteRouter.get(homeRegExp, (req, res, next) => {
     getHomeState().then(state => {
         const page = getHomePageTemplate(req.path);
         render(page, state)
-            .then(html => res.send(html))
+            .then(html => res.set('Cache-Control', 'public, max-age=60').send(html))
             .catch(next);
     });
 });
@@ -142,7 +142,7 @@ siteRouter.get(postRegExp, (req, res, next) => {
     if (post) {
         const page = getPostPageTemplate(req.path);
         render(page, post)
-            .then(html => res.send(html))
+            .then(html => res.set('Cache-Control', 'public, max-age=60').send(html))
             .catch(next);
     } else {
         next();
