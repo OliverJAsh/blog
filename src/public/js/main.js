@@ -93,7 +93,7 @@ const handlePageState = (pageTemplate) => {
 
     const shouldCachePromise = Promise.resolve(
         canCache &&
-        (pageTemplate.shouldCache || isContentCached(pageTemplate.url))
+        (pageTemplate.shouldCache || isContentCached(url))
     );
 
     return renders().then(() => {
