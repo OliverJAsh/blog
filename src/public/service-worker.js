@@ -96,6 +96,7 @@ self.addEventListener('fetch', (event) => {
         && doesRequestAcceptHtml(request)
         && (homeRegExp.test(requestURL.pathname)
             || postRegExp.test(requestURL.pathname));
+    const isAssetRequest = isRootRequest && /^\/js\//.test(requestURL.pathname);
     if (shouldServeShell) {
         event.respondWith(
             caches.match(shellUrl).then(response => (
@@ -103,11 +104,12 @@ self.addEventListener('fetch', (event) => {
                 response || fetch(request)
             ))
         );
-    } else {
+    } else if (isAssetRequest) {
         event.respondWith(
             caches.match(request).then((response) => (
                 response || fetch(request)
             ))
         );
     }
+    // Else default to browser fetch
 });
