@@ -79,7 +79,7 @@ const getHomeState = () => (
     getPosts().then(posts => (
         // Trim state to reduce page size
         zipPostsWithSlugs(
-            sortPostsByDateDesc(posts).map(post => pick(post, 'title', 'date'))
+            sortPostsByDateDesc(posts).map(post => pick(post, 'title', 'date', 'showcase'))
         )
     ))
 );

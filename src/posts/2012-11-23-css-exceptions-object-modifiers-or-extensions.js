@@ -1,4 +1,5 @@
 export default {
+    showcase: true,
     title: 'CSS Exceptions: Object Modifiers or Extensions?',
     body: `<p>Harry Roberts recently published his thoughts on <a href="http://csswizardry.com/2012/11/code-smells-in-css/">code that smells</a>. In this article, Harry included a section on <em>undoing styles</em>:</p><blockquote><p>Any CSS that unsets styles (apart from in a reset) should start ringing alarm bells right away. The very nature of CSS is that things will, well, cascade and inherit from things defined previously. Rulesets should only ever inherit and add to previous ones, never undo.</p></blockquote><p>This made me think about my own practices for undoing styles. In this article, I will look at methods for coding CSS exceptions with undoing styles, and then without undoing styles, to see what is the better method with regards to OOCSS.</p><h2 id="introduction">Introduction</h2><p>Imagine we have a <code>widget</code> object. Our <code>widget</code> has a border, some padding, and some font sizing:</p><pre><code>/* Object */
 .widget {

@@ -1,4 +1,5 @@
 export default {
+    showcase: true,
     title: 'Methods for Modifying Objects in OOCSS',
     body: `<p>There are two ways of implementing object modifiers in CSS: extending objects in the CSS, or deferring the work to your HTML and concatenating classes there instead. In this article, I introduce the purpose of a modifier in OOCSS, and then I investigate the advantages and disadvantages of using both methods, as well as claims that <code>@extend</code>s can <a href="https://twitter.com/csswizardry/status/261056433607569409">sometimes be a fools gold</a>.</p><h2 id="what_is_a_modifier">What is a Modifier?</h2><p>For those who are new to the idea of OOCSS, let’s take a look at a simple example of where we might apply the priniciples of object modifiers.</p><pre><code>.widget {
   padding: 10px;
