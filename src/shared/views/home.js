@@ -28,7 +28,7 @@ const built = [
     { title: 'Sbscribe, a social news and feed reader. ', href: 'https://vimeo.com/69376016' }
 ];
 const talks = [
-    { title: 'Building an offline page for theguardian.com', href: 'https://www.youtube.com/watch?v=y8UsGSFz8IQ', description: 'In light of responsive web design, people often focus heavily on how content should be rendered, but how it is produced is usually overlooked. This talk reviews how the challenges of responsive web design can bleed into issues of content production, and how the Guardian solves these issues with Composer – our web-based, digital content-management system.' },
+    { title: 'Building an offline page for theguardian.com', href: 'https://www.youtube.com/watch?v=dZU6_2xXeVk', description: 'In light of responsive web design, people often focus heavily on how content should be rendered, but how it is produced is usually overlooked. This talk reviews how the challenges of responsive web design can bleed into issues of content production, and how the Guardian solves these issues with Composer – our web-based, digital content-management system.' },
     { title: 'Building a CMS for the responsive web', href: 'https://www.youtube.com/watch?v=31EpyxcmBeU', description: 'Native apps have long had tools to give users good experiences when they have poor internet connectivity or none at all. With service workers, the web is catching up. This talk demonstrates how I built the Guardian’s offline page.' }
 ];
 const externalArticles = [
