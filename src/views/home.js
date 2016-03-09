@@ -1,6 +1,5 @@
 import h from 'virtual-dom/h';
-import exp from '../exp';
-import { isContentCached } from '../helpers';
+import mainView from './main';
 
 const about = h('p', [
     'I’m a software engineer working on the team behind',
@@ -37,29 +36,24 @@ const externalArticles = [
     { title: 'Inside the Guardian’s CMS: meet Scribe, an extensible rich text editor', href: 'https://www.theguardian.com/info/developer-blog/2014/mar/20/inside-the-guardians-cms-meet-scribe-an-extensible-rich-text-editor', date: new Date(2014, 2, 20) }
 ];
 
-const createPost = (post, href, isCached) => (
+const createPost = (post, href) => (
     h('li', [
         h('h3', h('a', { href }, post.title)),
-        exp(isCached) && h('p', h('strong', 'Available offline')),
         h('p', new Date(post.date).toDateString())
     ])
 );
 
 export default (posts) => {
-    const articleLINodesPromise = Promise.all(
+    const articleLINodes =
         posts
             .filter(([ , post ]) => (new Date(post.date).getFullYear() > 2013) || post.showcase)
-            .map(([ postSlug, post ]) => {
-                // TODO: Abstract somehow
-                const apiUrl = `/api/${postSlug}`;
-                return [ post, isContentCached(apiUrl).then(isCached => createPost(post, `/${postSlug}`, isCached)) ];
-            })
-            .concat(externalArticles.map(post => [ post, Promise.resolve(createPost({ title: post.title, date: post.date }, post.href, false)) ] ))
+            .map(([ postSlug, post ]) => [ post, createPost(post, `/${postSlug}`) ])
+            .concat(externalArticles.map(post => [ post, createPost({ title: post.title, date: post.date }, post.href) ] ))
             .sort(([ postA ], [ postB ]) => new Date(postA.date) - new Date(postB.date))
             .reverse()
-            .map(([ , postPromise ]) => postPromise)
-    );
-    return articleLINodesPromise.then(articleLINodes => (
+            .map(([ , tree ]) => tree);
+
+    const body =
         h('div', [
             about,
             h('h2', 'Things I’ve built'),
@@ -74,6 +68,7 @@ export default (posts) => {
             ))),
             h('h2', 'Thoughts I’ve published'),
             h('ul', articleLINodes)
-        ])
-    ));
+        ]);
+
+    return mainView({ title: '', body });
 };

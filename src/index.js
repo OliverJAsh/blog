@@ -10,11 +10,14 @@ import fsP from 'promised-io/fs';
 import sortBy from 'lodash/collection/sortBy';
 import pick from 'lodash/object/pick';
 
-import mainView from './main';
+import postView from './views/post';
+import homeView from './views/home';
+import errorView from './views/error';
 import { log } from './helpers';
 
-import { getHomePageTemplate, getPostPageTemplate, getErrorPageTemplate } from './shared/helpers';
-import { homeRegExp, postRegExp, postPrefixRegExp } from './shared/routing-reg-exps';
+const homeRegExp = /^\/$/;
+const postPrefixRegExp = /^\/(\d{4})\/(\d{2})\/(\d{2})\/([a-z0-9-]*)/;
+const postRegExp = new RegExp(postPrefixRegExp.source + /$/.source);
 
 process.on('uncaughtException', error => {
     log(error.stack);
@@ -51,77 +54,22 @@ app.use(compression());
 
 const secondsInAYear = 365 * 24 * 60 * 60;
 const publicDir = `${__dirname}/public`;
-// We don't want the service worker to have a cache max age
-app.get('/service-worker.js', (req, res, next) => {
-    res
-        .set('Content-Type', 'application/javascript')
-        .set('Cache-Control', 'no-store');
-    fs.createReadStream(`${publicDir}/service-worker.js`)
-        .on('error', next)
-        .pipe(res);
-});
 app.use('/', express.static(publicDir, { maxAge: secondsInAYear * 1000 }));
 
 const sortPostsByDateDesc = posts => sortBy(posts, post => post.date).reverse();
 
 const docType = '<!DOCTYPE html>';
-const render = (page, state) => (
-    page.getTree(state)
-        .then(node => mainView({ title: page.getTitle(state), body: node }))
-        .then(treeToHTML)
-        .then(html => docType + html)
+const stringifyTree = (x) => (
+    docType + treeToHTML(x)
 );
 
-const apiRouter = express.Router();
 const siteRouter = express.Router();
-
-const getHomeState = () => (
-    getPosts().then(posts => (
-        // Trim state to reduce page size
-        zipPostsWithSlugs(
-            sortPostsByDateDesc(posts).map(post => pick(post, 'title', 'date', 'showcase'))
-        )
-    ))
-);
-
-//
-// API
-//
-
-// We cache pages but we must ensure old assets are available
-
-apiRouter.use((req, res, next) => {
-    if (req.accepts('json')) {
-        next();
-    } else {
-        res.sendStatus(400);
-    }
-});
-
-apiRouter.get(homeRegExp, (req, res) => {
-    getHomeState().then(state => {
-        res.set('Cache-Control', 'public, max-age=60').send(state);
-    });
-});
-
-apiRouter.get(postRegExp, (req, res, next) => {
-    const { 0: year, 1: month, 2: date, 3: title } = req.params;
-    const post = getPost(year, month, date, title);
-    if (post) {
-        res.set('Cache-Control', 'public, max-age=60').send(post);
-    } else {
-        next();
-    }
-});
-
-apiRouter.use((req, res, next) => {
-    const state = { statusCode: 404, message: http.STATUS_CODES[404] };
-    res.status(404).send(state);
-});
 
 //
 // Site
 //
+
+// We cache pages but we must ensure old assets are available
 
 siteRouter.use((req, res, next) => {
     if (req.accepts('html')) {
@@ -131,23 +79,30 @@ siteRouter.use((req, res, next) => {
     }
 });
 
-siteRouter.get(homeRegExp, (req, res, next) => {
-    getHomeState().then(state => {
-        const page = getHomePageTemplate(req.path);
-        render(page, state)
-            .then(html => res.set('Cache-Control', 'public, max-age=60').send(html))
-            .catch(next);
-    });
+siteRouter.get(homeRegExp, (req, res) => {
+    getPosts()
+        .then(posts => (
+            // Trim state to reduce page size
+            zipPostsWithSlugs(
+                sortPostsByDateDesc(posts).map(post => pick(post, 'title', 'date', 'showcase'))
+            )
+        ))
+        .then(posts => {
+            const response = stringifyTree(homeView(posts));
+            res
+                .set('Cache-Control', 'public, max-age=60')
+                .send(response);
+        });
 });
 
 siteRouter.get(postRegExp, (req, res, next) => {
     const { 0: year, 1: month, 2: date, 3: title } = req.params;
     const post = getPost(year, month, date, title);
     if (post) {
-        const page = getPostPageTemplate(req.path);
-        render(page, post)
-            .then(html => res.set('Cache-Control', 'public, max-age=60').send(html))
-            .catch(next);
+        const response = stringifyTree(postView([ req.path.replace(/^\//, ''), post ]));
+        res
+            .set('Cache-Control', 'public, max-age=60')
+            .send(response);
     } else {
         next();
     }
@@ -158,14 +113,12 @@ siteRouter.get(new RegExp(postPrefixRegExp.source + /\.html$/.source), (req, res
     res.redirect(301, newPath);
 });
 
-siteRouter.use((req, res, next) => {
+siteRouter.use((req, res) => {
     const state = { statusCode: 404, message: http.STATUS_CODES[404] };
-    render(getErrorPageTemplate(), state)
-        .then(html => res.status(404).send(html))
-        .catch(next);
+    const response = stringifyTree(errorView(state));
+    res.status(404).send(response);
 });
 
-app.use('/api', apiRouter);
 app.use('/', siteRouter);
 
 app.use((req, res) => res.status(404).send());
