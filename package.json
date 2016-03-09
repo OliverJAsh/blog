@@ -13,7 +13,6 @@
     "compression": "^1.5.2",
     "dateformat": "https://registry.npmjs.org/dateformat/-/dateformat-1.0.12.tgz",
     "eslint": "^1.10.3",
-    "eslint-plugin-html": "^1.1.0",
     "express": "^4.13.3",
     "gulp": "^3.9.0",
     "lodash": "^3.10.1",
