@@ -16,7 +16,6 @@ const about = h('p', [
     h('a', { href: 'http://oliverjash.github.io/cv/' }, 'View my CV.')
 ]);
 const built = [
-    { title: 'my new offline-first blog', href: 'https://github.com/OliverJAsh/blog' },
     { title: 'a simple offline blog to demonstrate service worker capabitilies', href: 'https://github.com/OliverJAsh/simple-offline-blog' },
     { title: 'Chrome extension for editing URL query parameters, written in Elm', href: 'https://github.com/OliverJAsh/query-params-chrome' },
     { title: 'Chrome extension for easily viewing and switching A/B tests on theguardian.com, written in Cycle.js', href: 'https://github.com/OliverJAsh/guardian-ab-tests-chrome' },
