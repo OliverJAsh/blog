@@ -25,6 +25,7 @@ export default ({ title, body }) => (
             h('h1', [
                 h('a', { href: '/' }, siteTitle)
             ]),
+            h('h3', 'Full-stack web developer'),
             h('div', [ body ])
         ])
     ])
