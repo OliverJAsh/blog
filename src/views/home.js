@@ -1,9 +1,9 @@
 import h from 'virtual-dom/h';
 import mainView from './main';
 
-const createPost = (post, href) => (
+const createPost = (post) => (
     h('li', [
-        h('h3', h('a', { href }, post.title)),
+        h('h3', h('a', { href: post.href }, post.title)),
         h('p', new Date(post.date).toDateString())
     ])
 );
