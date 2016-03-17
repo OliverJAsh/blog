@@ -1,5 +1,6 @@
 import h from 'virtual-dom/h';
 import css from '../css.js';
+import analyticsJs from '../analytics.js';
 
 const renderNonBlockingCss = href => (
     h('link', {
@@ -30,7 +31,8 @@ export default ({ title, body }) => (
                 h('a', { href: '/' }, siteTitle)
             ]),
             h('h3', 'Full-stack web developer'),
-            h('div', [ body ])
+            h('div', [ body ]),
+            h('script', { innerHTML: analyticsJs })
         ])
     ])
 );
