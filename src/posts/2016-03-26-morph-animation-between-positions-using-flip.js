@@ -4,7 +4,7 @@ export default {
 <p>How could this animation be achieved using the web platform?</p>
 <p>When collapsed, the navigation button should be part of the document flow, and upon user interaction, it should expand to a fixed element which covers the screen. Significantly, I wanted the animation to be buttery smooth and play at 60fps, so I could only animate <a href="http://www.sitepoint.com/introduction-to-hardware-acceleration-css-animations/">CSS properties which supported hardware acceleration</a>.</p>
 <p>Here is the final result:</p>
-<iframe width="320" height="568" src="https://www.youtube.com/embed/cUYbPFTnFLY" frameborder="0" allowfullscreen></iframe>
+<iframe width="270" height="480" src="https://www.youtube.com/embed/cUYbPFTnFLY" frameborder="0" allowfullscreen></iframe>
 <p>(Alternatively view at <a href="https://www.youtube.com/watch?v=cUYbPFTnFLY">https://www.youtube.com/watch?v=cUYbPFTnFLY</a>.)</p>
 <p>The answer was to use <a href="https://aerotwist.com/blog/flip-your-animations/">Paul Lewis’ First Last Invert Play (FLIP)</a> technique. When the user clicks the button:</p>
 <ul>
