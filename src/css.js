@@ -27,5 +27,5 @@ a:visited {
     color: hsl(0, 50%, 35%);
 }
 pre { overflow-x: auto; }
-img { max-width: 100%; }
+img, iframe { max-width: 100%; }
 `;
