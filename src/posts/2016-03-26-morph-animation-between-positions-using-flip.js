@@ -8,10 +8,10 @@ export default {
 <p>(Alternatively view at <a href="https://www.youtube.com/watch?v=cUYbPFTnFLY">https://www.youtube.com/watch?v=cUYbPFTnFLY</a>.)</p>
 <p>The answer was to use <a href="https://aerotwist.com/blog/flip-your-animations/">Paul Lewis’ First Last Invert Play (FLIP)</a> technique. When the user clicks the button:</p>
 <ul>
-<li>First: calculate the current position of the button in its collapsed state using <code>Element.getBoundingClientRect</code>.</li>
-<li>Last: apply the expanded state (fixed) and calculate the new position using <code>Element.getBoundingClientRect</code>. This triggers a forced synchronous layout, but we have 100ms to respond (see <a href="https://developers.google.com/web/tools/chrome-devtools/profile/evaluate-performance/rail">Response Animate Idle Load (RAIL)</a>), so that’s fine.</li>
-<li>Invert: use CSS transforms to mimic the collapsed state. This can be calculated using our first and last positions.</li>
-<li>Play: enable CSS transitions and undo the inverted styles. The browser will then play out the animation smoothly at 60fps.</li>
+<li><p>First: calculate the current position of the button in its collapsed state using <code>Element.getBoundingClientRect</code>.</p></li>
+<li><p>Last: apply the expanded state (fixed) and calculate the new position using <code>Element.getBoundingClientRect</code>. This triggers a forced synchronous layout, but we have 100ms to respond (see <a href="https://developers.google.com/web/tools/chrome-devtools/profile/evaluate-performance/rail">Response Animate Idle Load (RAIL)</a>), so that’s fine.</p></li>
+<li><p>Invert: use CSS transforms to mimic the collapsed state. This can be calculated using our first and last positions.</p></li>
+<li><p>Play: enable CSS transitions and undo the inverted styles. The browser will then play out the animation smoothly at 60fps.</p></li>
 </ul>
 <p>We can use the same technique to collapse the button when it’s in its expanded state.</p>
 <p><a href="http://jsbin.com/firucu/1/quiet">You can try it out for yourself</a>. Here is the code: <a href="http://jsbin.com/firucu/1/edit?html,output">http://jsbin.com/firucu/1/edit?html,output</a></p>
