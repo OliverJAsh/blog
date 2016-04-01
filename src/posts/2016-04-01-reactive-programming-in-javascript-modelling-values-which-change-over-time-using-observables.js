@@ -79,7 +79,7 @@ const decrement =
 <p>Then we can define an Observable of deltas by <a href="http://rxmarbles.com/#merge">merging</a> our <code>increment</code> and <code>decrement</code> Observables.</p>
 <pre><code>const deltas = Rx.Observable.merge(increment, decrement);
 </code></pre>
-<p>We can use this Observable of deltas to update the value of our counter. As we identified earlier, the counter should start with a value of 0, and emits new values by incrementing or decrementing the previous value as the user clicks the respective buttons (i.e. when <code>deltas</code> emits a new value).</p>
+<p>We can use this Observable of deltas to update the value of our counter. As we identified earlier, the counter should start with a value of 0, and emit new values by incrementing or decrementing the previous value as the user clicks the respective buttons (i.e. when <code>deltas</code> emits a new value).</p>
 <p><a href="http://rxmarbles.com/#scan"><code>scan</code></a> is like <code>Array.prototype.reduce</code> but instead of reducing an array, we are reducing a stream of values over time: each time the stream emits a new value, we compute the new accumulator (in this case our counter value) from the previous and new values.</p>
 <pre><code>const counter = deltas
   .startWith(0)
