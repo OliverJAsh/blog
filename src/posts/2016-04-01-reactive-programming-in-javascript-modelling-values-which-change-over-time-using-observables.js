@@ -98,7 +98,7 @@ const decrement =
 <p>To understand where and when the Observable emits new values, we can refer to its definition and work backwards from there, whereas when we were using <code>let</code> to model our counter, we had to search the codebase for usages of our variable. This is what it means to be declarative.</p>
 </li>
 <li>
-<p>By raising the level of abstraction, the flow of our program is now immediately clear. Whereas before the flow was deeply embedded in implementation details (i.e. nested in the event handler), now the flow of our program is at the very top of our program.</p>
+<p>By raising the level of abstraction, the flow of our program is now immediately clear. Whereas before the flow was deeply embedded in implementation details (i.e. nested in the event handler), now the flow is at the very top of our program.</p>
 </li>
 <li>
 <p>This code is also easier to test, because we can pass a counter value into the render function instead of depending on a global variable.</p>
