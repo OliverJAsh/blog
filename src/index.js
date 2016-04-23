@@ -155,4 +155,4 @@ const onListen = server => {
 };
 
 const httpServer = http.createServer(app);
-httpServer.listen(8080, () => onListen(httpServer));
+httpServer.listen(process.env.PORT || 8080, () => onListen(httpServer));
