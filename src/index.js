@@ -140,8 +140,6 @@ siteRouter.use((req, res) => {
 
 app.use('/', siteRouter);
 
-app.use((req, res) => res.status(404).send());
-
 app.use((error, req, res, next) => {
     log(error.stack);
     res.sendStatus(500);
