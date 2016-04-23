@@ -1,10 +1,11 @@
 {
   "private": true,
   "scripts": {
-    "compile": "cd src && babel *.js --out-dir ../target && babel views --out-dir ../target/views && babel posts --out-dir ../target/posts",
-    "start": "node target/ >> log.txt",
-    "build": "gulp build",
-    "clean": "rm -rf target",
+    "start": "npm run compile && npm run runServer",
+    "compile": "npm run copyImages && npm run babelCompile",
+    "babelCompile": "cd src && babel *.js --out-dir ../target && babel views --out-dir ../target/views && babel posts --out-dir ../target/posts",
+    "runServer": "node target/index.js >> log.txt",
+    "copyImages": "cp -r ./src/public/images/* ./target/public/images",
     "lint": "eslint ."
   },
   "dependencies": {
@@ -14,7 +15,6 @@
     "dateformat": "https://registry.npmjs.org/dateformat/-/dateformat-1.0.12.tgz",
     "eslint": "^1.10.3",
     "express": "^4.13.3",
-    "gulp": "^3.9.0",
     "lodash": "^3.10.1",
     "promised-io": "^0.3.5",
     "slug": "^0.9.1",
