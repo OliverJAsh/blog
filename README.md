@@ -1,4 +1,4 @@
-# Blog
+# oliverjash.me
 
 ## Usage
 
