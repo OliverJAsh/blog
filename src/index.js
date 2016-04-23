@@ -1,5 +1,4 @@
 import http from 'http';
-import https from 'https';
 import fs from 'fs';
 import express from 'express';
 import compression from 'compression';
@@ -149,25 +148,11 @@ app.use((error, req, res, next) => {
     res.sendStatus(500);
 });
 
-const isDev = app.settings.env === 'development';
 const onListen = server => {
     const { port } = server.address();
 
     log(`Server running on port ${port}`);
 };
 
-if (isDev) {
-    const httpServer = http.createServer(app);
-    httpServer.listen(8080, () => onListen(httpServer));
-} else {
-    const path = '/etc/letsencrypt/live/oliverjash.me';
-    const key = fs.readFileSync(`${path}/privkey.pem`);
-    const cert = fs.readFileSync(`${path}/fullchain.pem`);
-    const ca = fs.readFileSync(`${path}/chain.pem`);
-    const credentials = { key, cert, ca };
-
-    const httpServer = http.createServer(app);
-    httpServer.listen(80, () => onListen(httpServer));
-    const httpsServer = https.createServer(credentials, app);
-    httpsServer.listen(443, () => onListen(httpsServer));
-}
+const httpServer = http.createServer(app);
+httpServer.listen(8080, () => onListen(httpServer));
