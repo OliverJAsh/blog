@@ -7,7 +7,6 @@ import dateFormat from 'dateformat';
 import slug from 'slug';
 import denodeify from 'denodeify';
 import sortBy from 'lodash/collection/sortBy';
-import pick from 'lodash/object/pick';
 
 import postView from './views/post';
 import homeView from './views/home';
@@ -97,15 +96,13 @@ siteRouter.use((req, res, next) => {
     }
 });
 
-siteRouter.get(homeRegExp, (req, res) => {
+siteRouter.get(homeRegExp, (req, res, next) => {
     getPosts()
         .then(posts => (
             sortPostsByDateDesc(
                 posts
                     .map(post => Object.assign({}, post, { href: getPostSlug(post) }))
                     .concat(externalArticles)
-                    // Trim state to reduce page size
-                    .map(post => pick(post, 'title', 'href', 'date', 'showcase'))
             )
         ))
         .then(posts => {
