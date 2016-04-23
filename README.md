@@ -9,7 +9,7 @@ npm run compile
 npm start
 ```
 
-### Lint
+## Lint
 ```
 npm run lint
 ```
@@ -22,7 +22,7 @@ npm run lint
 * SEO
 * Re-use request when opting to cache post
 
-### Deploy
+## Deploy
 
 ```
 ssh -i ec2.pem ec2-user@52.21.34.140
