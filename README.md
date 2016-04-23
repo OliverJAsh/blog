@@ -25,16 +25,16 @@ npm run lint
 ### Deploy
 
 ```
-ssh -i blog.pem ec2-user@52.21.34.140
+ssh -i ec2.pem ec2-user@52.21.34.140
 ```
 
 ```
-cd blog &&
+cd oliverjash.me &&
 git pull &&
-sudo killall node &&
+killall node &&
 # TODO: Clean only works after first build
 npm run clean &&
 npm run build &&
 npm run compile &&
-sudo NODE_ENV=production npm start
+PORT=8080 npm start &
 ```
