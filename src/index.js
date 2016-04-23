@@ -113,7 +113,8 @@ siteRouter.get(homeRegExp, (req, res) => {
             res
                 .set('Cache-Control', 'public, max-age=60')
                 .send(response);
-        });
+        })
+        .catch(next);
 });
 
 siteRouter.get(postRegExp, (req, res, next) => {
