@@ -18,7 +18,6 @@
     "lodash": "^3.10.1",
     "promised-io": "^0.3.5",
     "slug": "^0.9.1",
-    "sorted-object": "^1.0.0",
     "vdom-to-html": "^2.1.1",
     "virtual-dom": "^2.1.1"
   }
