@@ -1,6 +1,6 @@
 import h from 'virtual-dom/h';
-import css from '../css.js';
-import analyticsJs from '../analytics.js';
+import css from '../css';
+import analyticsJs from '../analytics';
 
 const renderNonBlockingCss = href => [
     h('link', {
