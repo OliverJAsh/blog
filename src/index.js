@@ -5,7 +5,7 @@ import compression from 'compression';
 import treeToHTML from 'vdom-to-html';
 import dateFormat from 'dateformat';
 import slug from 'slug';
-import fsP from 'promised-io/fs';
+import denodeify from 'denodeify';
 import sortBy from 'lodash/collection/sortBy';
 import pick from 'lodash/object/pick';
 
@@ -24,8 +24,9 @@ process.on('uncaughtException', error => {
 });
 
 const postsDir = `${__dirname}/posts`;
+const readdir = denodeify(fs.readdir);
 const getPosts = () => (
-    fsP.readdir(postsDir)
+    readdir(postsDir)
         .then(fileNames => fileNames.map(fileName => require(`${postsDir}/${fileName}`).default))
 );
 const getPost = (year, month, date, title) => {
