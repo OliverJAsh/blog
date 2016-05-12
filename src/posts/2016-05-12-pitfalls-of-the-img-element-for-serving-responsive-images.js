@@ -21,8 +21,11 @@ export default {
 <p>So how can we serve images that vary their width by breakpoint and <em>not DPR</em>?</p>
 <p>The answer was the <code>picture</code> element, which allows you to provide multiple <code>source</code> elements, each with their own <code>sizes</code> and <code>srcset</code> attributes. Significantly, the <code>source</code> element also has a <code>media</code> attribute which allows you to guard the element from usage with a media condition. Using the <code>source</code> element we were able to split our <code>sizes</code> and <code>srcset</code> attributes by breakpoint. This meant high DPR devices could only choose from images available at the current breakpoint.</p>
 <pre><code>&lt;picture&gt;
-  &lt;source media=&quot;(min-width: 500px)&quot; sizes=&quot;700px&quot; srcset=&quot;700.jpg 700w&quot; /&gt;
-  &lt;source sizes=&quot;300px&quot; srcset=&quot;300.jpg 300w&quot; /&gt;
+  &lt;source media=&quot;(min-width: 500px)&quot;
+          sizes=&quot;700px&quot;
+          srcset=&quot;700.jpg 700w&quot; /&gt;
+  &lt;source sizes=&quot;300px&quot;
+          srcset=&quot;300.jpg 300w&quot; /&gt;
   &lt;img /&gt;
 &lt;/picture&gt;
 </code></pre>
