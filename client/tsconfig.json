@@ -2,7 +2,8 @@
     "compilerOptions": {
         "noImplicitAny": true,
         "target": "es5",
-        "outDir": "./target"
+        "outDir": "./target",
+        "allowJs": true
     },
-    "files": ["./src/main.ts"]
+    "exclude": ["./target"]
 }
