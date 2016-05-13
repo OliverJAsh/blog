@@ -2,22 +2,23 @@
   "private": true,
   "scripts": {
     "start": "npm run compile && npm run runServer",
-    "compile": "npm run copyImages && npm run babelCompile",
-    "babelCompile": "cd src && babel *.js --out-dir ../target && babel views --out-dir ../target/views && babel posts --out-dir ../target/posts",
-    "runServer": "node target/index.js >> log.txt",
-    "copyImages": "cp -r ./src/public/images/* ./target/public/images",
-    "lint": "eslint ."
+    "compile": "npm run clean && npm run compileClient && cp -r client/target/* server/target/client && npm run compileServerTs && cp -r server/src/posts server/target",
+    "clean": "rm -rf server/target && rm -rf client/target && mkdir -p server/target/client && mkdir -p client/target",
+    "compileClient": "npm run compileClientTs && cp -r client/src/images client/target",
+    "compileClientTs": "tsc --project client",
+    "compileServerTs": "tsc --project server",
+    "runServer": "node server/target/index.js >> log.txt",
+    "postinstall": "cd server && typings install && cd .."
   },
   "dependencies": {
-    "babel-cli": "^6.2.0",
-    "babel-preset-es2015": "^6.1.18",
     "compression": "^1.5.2",
     "dateformat": "https://registry.npmjs.org/dateformat/-/dateformat-1.0.12.tgz",
     "denodeify": "^1.2.1",
-    "eslint": "^1.10.3",
     "express": "^4.13.3",
-    "lodash": "^3.10.1",
+    "lodash": "^4.7.0",
     "slug": "^0.9.1",
+    "typescript": "1.8.7",
+    "typings": "^0.7.9",
     "vdom-to-html": "^2.1.1",
     "virtual-dom": "^2.1.1"
   }

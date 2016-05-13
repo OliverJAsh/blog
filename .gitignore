@@ -1,4 +1,7 @@
 /node_modules/
-/target/
+/server/target/
+/client/target/
+/server/typings/
+/client/typings/
 /npm-debug.log
 /log.txt

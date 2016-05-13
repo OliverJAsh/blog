@@ -1,0 +1,11 @@
+// Place your settings in this file to overwrite the default settings
+{
+    "typescript.tsdk": "./node_modules/typescript/lib",
+    "search.exclude": {
+        "log.txt": true,
+        "server/target": true,
+        "server/typings": true,
+        "client/target": true,
+        "client/typings": true
+    }
+}
