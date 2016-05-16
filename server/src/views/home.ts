@@ -1,16 +1,16 @@
 import { h } from 'virtual-dom';
 import mainView from './main';
 
-import { Post } from '../models';
+import { PostPreview, Project, Talk } from '../models';
 
-const createPost = (post: Post) => (
+const createPost = (post: PostPreview) => (
     h('li', [
         h('h3', [ h('a', { href: post.href }, post.title) ]),
         h('p', post.date.toDateString())
     ])
 );
 
-export default (built: any, talks: any, posts: Array<Post>) => {
+export default (projects: Project[], talks: Talk[], posts: Array<PostPreview>) => {
     const body =
         h('div', [
             h('p', [
@@ -28,7 +28,7 @@ export default (built: any, talks: any, posts: Array<Post>) => {
                 h('a', { href: 'http://oliverjash.github.io/cv/' }, 'View my CV.')
             ]),
             h('h2', 'Things I’ve built'),
-            h('ul', built.map(({ title, href }) => h('li', [ h('a', { href }, title) ]))),
+            h('ul', projects.map(({ title, href }) => h('li', [ h('a', { href }, title) ]))),
             h('p', [ h('a', { href: 'https://github.com/OliverJAsh' }, 'See more on GitHub.') ]),
             h('h2', 'Talks I’ve given'),
             h('ul', talks.map(({ title, href, description }) => (
@@ -38,11 +38,7 @@ export default (built: any, talks: any, posts: Array<Post>) => {
                 ])
             ))),
             h('h2', 'Thoughts I’ve published'),
-            h('ul', (
-                posts
-                    .filter((post: Post) => (post.date.getFullYear() > 2013) || post.showcase)
-                    .map(createPost)
-            ))
+            h('ul', posts.map(createPost))
         ]);
 
     return mainView({ title: '', body });
