@@ -1,12 +1,13 @@
 import { h } from 'virtual-dom';
 import mainView from './main';
+import { groupBy, toPairs } from 'lodash';
+import dateFormat = require('dateformat');
 
 import { PostPreview, Project, Talk } from '../models';
 
 const createPost = (post: PostPreview) => (
     h('li', [
-        h('h3', [ h('a', { href: post.href }, post.title) ]),
-        h('p', post.date.toDateString())
+        h('h3', [ h('a', { href: post.href }, post.title) ])
     ])
 );
 
@@ -38,7 +39,18 @@ export default (projects: Project[], talks: Talk[], posts: Array<PostPreview>) =
                 ])
             ))),
             h('h2', 'Thoughts I’ve published'),
-            h('ul', posts.map(createPost))
+            h('ul', (
+                toPairs(groupBy(posts, post => post.date.getFullYear()))
+                    .reverse()
+                    .map(
+                        ([ year, posts ]) => (
+                            h('li', [
+                                h('h3', year),
+                                h('ul', posts.map(createPost))
+                            ])
+                        )
+                    )
+            ))
         ]);
 
     return mainView({ title: '', body });
