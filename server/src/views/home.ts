@@ -31,14 +31,14 @@ export default (projects: Project[], talks: Talk[], posts: Array<PostPreview>) =
             h('h2', 'Things I’ve built'),
             h('ul', projects.map(({ title, href }) => h('li', [ h('a', { href }, title) ]))),
             h('p', [ h('a', { href: 'https://github.com/OliverJAsh' }, 'See more on GitHub.') ]),
-            h('h2', 'Talks I’ve given'),
+            h('h2', 'Talks'),
             h('ul', talks.map(({ title, href, description }) => (
                 h('li', [
                     h('h3', [ h('a', { href }, title) ]),
                     h('p', description)
                 ])
             ))),
-            h('h2', 'Thoughts I’ve published'),
+            h('h2', 'Posts'),
             h('ul', (
                 toPairs(groupBy(posts, post => post.date.getFullYear()))
                     .reverse()
