@@ -14,7 +14,7 @@ const createPost = (post: PostPreview) => (
 
 export default (projects: Project[], talks: Talk[], posts: Array<PostPreview>) => {
     const body =
-        h('div', [
+        h('main', [
             intro,
             h('p', [ h('a', { href: '/cv' }, 'View my CV.') ]),
             h('h2', 'Things I’ve built'),
