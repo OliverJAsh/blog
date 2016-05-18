@@ -12,5 +12,5 @@ export default (post: Post) => {
         ]),
         h('div', { innerHTML: post.body }, [])
     ]);
-    return mainView({ title: post.title, body });
+    return mainView({ title: post.title, description: post.description, body });
 };

@@ -1,6 +1,7 @@
 export interface PostJson {
     showcase?: boolean;
     title: string;
+    description: string;
     date: string;
     body: string;
 }
@@ -8,6 +9,7 @@ export interface PostJson {
 export interface Post {
     showcase?: boolean;
     title: string;
+    description: string;
     date: Date;
     body: string;
     href: string;

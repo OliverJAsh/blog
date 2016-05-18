@@ -76,6 +76,7 @@ const postJsonToPost = (postJson: PostJson): Post => (
     {
         showcase: postJson.showcase,
         title: postJson.title,
+        description: postJson.description,
         date: new Date(postJson.date),
         body: postJson.body,
         href: `/${getPostSlug(postJson)}`
