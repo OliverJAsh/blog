@@ -17,6 +17,7 @@ import * as denodeify from 'denodeify';
 import postView from './views/post';
 import homeView from './views/home';
 import errorView from './views/error';
+import cvView from './views/cv';
 
 import { Post, PostJson, PostPreview, Talk, Project } from './models';
 
@@ -149,6 +150,12 @@ siteRouter.get(postRegExp, (req, res, next) => {
         })
         .catch(next);
 });
+
+siteRouter.get('/cv', (req, res) => (
+    res
+        .set('Cache-Control', 'public, max-age=60')
+        .send(stringifyTree(cvView()))
+));
 
 siteRouter.get(new RegExp(postPrefixRegExp.source + /\.html$/.source), (req, res) => {
     const newPath = req.path.replace(/\.html$/, '');

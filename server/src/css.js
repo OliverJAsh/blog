@@ -28,4 +28,22 @@ a:visited {
 }
 pre { overflow-x: auto; }
 img, iframe { max-width: 100%; }
+
+.grade {
+    font-weight: bold;
+}
+
+.time-entry h3 {
+    /* Reset composed: UA */
+    /* Fallback */
+    margin-bottom: initial;
+    margin-bottom: unset;
+}
+
+.time-entry div {
+    /* Reset inherited: html */
+    color: hsl(0, 0%, 40%);
+    /* Reset inherited: html */
+    font-family: "Helvetica Neue", "Helvetica", sans-serif;
+}
 `;
