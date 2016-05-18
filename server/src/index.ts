@@ -43,11 +43,16 @@ const postsDir = `${__dirname}/posts`;
 const loadPost = (fileName: string): Promise<PostJson> => loadJsonFile<PostJson>(`${postsDir}/${fileName}`);
 
 const readdir = denodeify(fs.readdir);
-const getPosts = (): Promise<Array<PostJson>> => (
+const postsPromise: Promise<Array<PostJson>> = (
     readdir(postsDir).then(fileNames => Promise.all(fileNames.map(fileName => loadPost(fileName))))
 );
+const postsMapPromise = postsPromise.then(posts => posts.reduce((acc, post) => {
+    acc.set(getPostSlug(post), post);
+    return acc;
+}, new Map<string, PostJson>()));
+
 const getPost = (year: string, month: string, date: string, title: string): Promise<PostJson> => (
-    loadPost(`${year}-${month}-${date}-${title}.json`)
+    postsMapPromise.then(postsMap => postsMap.get(`${year}/${month}/${date}/${title}`))
 );
 
 const getPostSlug = (postJson: PostJson) => (
@@ -119,7 +124,7 @@ siteRouter.use((req, res, next) => {
 });
 
 siteRouter.get(homeRegExp, (req, res, next) => (
-    getPosts()
+    postsPromise
         .then(posts => (
             sortPostsByDateDesc(
                 posts
