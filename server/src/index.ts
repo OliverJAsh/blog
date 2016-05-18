@@ -19,6 +19,8 @@ import homeView from './views/home';
 import errorView from './views/error';
 import cvView from './views/cv';
 
+import redirectTrailingSlashes from './redirect-trailing-slashes';
+
 import { Post, PostJson, PostPreview, Talk, Project } from './models';
 
 const homeRegExp = /^\/$/;
@@ -53,6 +55,7 @@ const getPostSlug = (postJson: PostJson) => (
 );
 
 const app = express();
+app.enable('strict routing');
 
 // // Remember: order matters!
 
@@ -67,7 +70,7 @@ const sortPostsByDateDesc = (posts: Array<PostPreview>) => sortBy(posts, post =>
 const docType = '<!DOCTYPE html>';
 const stringifyTree = (tree: VirtualDOM.VNode) => docType + treeToHTML(tree);
 
-const siteRouter = express.Router();
+const siteRouter = express.Router({ strict: app.get('strict routing') });
 
 const postJsonToPost = (postJson: PostJson): Post => (
     {
@@ -161,6 +164,8 @@ siteRouter.get(new RegExp(postPrefixRegExp.source + /\.html$/.source), (req, res
     const newPath = req.path.replace(/\.html$/, '');
     res.redirect(301, newPath);
 });
+
+app.use(redirectTrailingSlashes);
 
 siteRouter.use((req, res) => {
     const state = { statusCode: 404, message: http.STATUS_CODES[404] };
