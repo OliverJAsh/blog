@@ -19,7 +19,9 @@ const renderNonBlockingCss = (href: string): Array<VNode> => [
 
 const siteTitle = 'Oliver Joseph Ash';
 
-export default ({ title, body }) => (
+// Implicit any here, be careful
+// https://github.com/Microsoft/TypeScript/issues/8667
+export default ({ title, body }: { title: string, body: VNode }) => (
     h('html', [
         h('head', [
             h('meta', { charset: 'utf-8' }, []),
