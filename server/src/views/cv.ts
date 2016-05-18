@@ -117,7 +117,7 @@ export default () => {
                     `Whilst `,
                     h('a', {
                         "attributes": {
-                            "href": "http://samefourchords.com",
+                            "href": "https://samefourchords.com",
                             "title": "See my photo blog"
                         }
                     }, `travelling Europe`),
@@ -238,9 +238,9 @@ export default () => {
                         h('dd', [
                             h('a', {
                                 "attributes": {
-                                    "href": "http://oliverjash.me/"
+                                    "href": "https://oliverjash.me/"
                                 }
-                            }, `http://oliverjash.me/`)
+                            }, `https://oliverjash.me/`)
                         ]),
                         h('dd', [
                             h('a', {
@@ -253,9 +253,9 @@ export default () => {
                         h('dd', [
                             h('a', {
                                 "attributes": {
-                                    "href": "http://samefourchords.com/"
+                                    "href": "https://samefourchords.com/"
                                 }
-                            }, `http://samefourchords.com/`)
+                            }, `https://samefourchords.com/`)
                         ]),
                         h('dt', `Birth`),
                         h('dd', [
