@@ -29,7 +29,7 @@ export default (projects: Project[], talks: Talk[], posts: Array<PostPreview>) =
             ))),
             h('h2', 'Posts'),
             h('ul', (
-                toPairs(groupBy(posts, post => post.date.getFullYear()))
+                (<[ string, PostPreview[] ][]>toPairs(groupBy(posts, post => post.date.getFullYear())))
                     .reverse()
                     .map(
                         ([ year, posts ]) => (
