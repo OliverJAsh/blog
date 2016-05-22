@@ -8,7 +8,7 @@ import { PostPreview, Project, Talk } from '../models';
 
 const createPost = (post: PostPreview) => (
     h('li', [
-        h('h3', [ h('a', { href: post.href }, post.title) ])
+        h('h4', [ h('a', { href: post.href }, post.title) ])
     ])
 );
 
