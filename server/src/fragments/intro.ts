@@ -10,5 +10,8 @@ export default h('p', [
     ' ',
     'With a strong background in arts as well as engineering, I approach web development in its entirety: UX, performance, and functional programming are some of the things I enjoy most.',
     ' ',
-    h('a', { href: 'http://samefourchords.com/' }, 'I also enjoy photography.')
+    h('a', { href: 'https://samefourchords.com/' }, 'See my photography blog'),
+    ' or ',
+    h('a', { href: 'https://www.instagram.com/oliverjash', rel: 'me' }, 'my Instagram'),
+    '.'
 ]);
