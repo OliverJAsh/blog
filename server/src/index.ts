@@ -24,7 +24,7 @@ import redirectTrailingSlashes from './redirect-trailing-slashes';
 import { Post, PostJson, PostPreview, Talk, Project } from './models';
 
 const homeRegExp = /^\/$/;
-const postPrefixRegExp = /^\/(\d{4})\/(\d{2})\/(\d{2})\/([a-z0-9-]*)/;
+const postPrefixRegExp = /^\/(\d{4})\/(\d{2})\/(\d{2})\/([a-z0-9-]+)/;
 const postRegExp = new RegExp(postPrefixRegExp.source + /$/.source);
 
 const log = (message: string) => {
