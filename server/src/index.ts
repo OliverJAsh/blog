@@ -187,7 +187,6 @@ app.use((error: Error, req: express.Request, res: express.Response, next: expres
     res.sendStatus(500);
 });
 
-const isDev = app.settings.env === 'development';
 const onListen = (server: http.Server) => {
     const { port } = server.address();
 
