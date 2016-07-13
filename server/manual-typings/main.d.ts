@@ -1,5 +1,3 @@
-/// <reference path="../typings/main.d.ts" />
-
 declare module 'vdom-to-html' {
     function main(node: VirtualDOM.VNode): string;
 

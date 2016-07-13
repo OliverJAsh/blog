@@ -1,9 +1,3 @@
-/// <reference path="../typings/main.d.ts" />
-/// <reference path="../manual-typings/main.d.ts" />
-
-// https://github.com/Microsoft/TypeScript/issues/3005
-/// <reference path="../../node_modules/typescript/lib/lib.es6.d.ts" />
-
 import * as http from 'http';
 import * as fs from 'fs';
 import * as express from 'express';
