@@ -1,6 +1,9 @@
 export default `
 html {
-    font-family: "Lora", "Georgia", serif;
+    font-family: -apple-system, BlinkMacSystemFont,
+        "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
+        "Fira Sans", "Droid Sans", "Helvetica Neue",
+        sans-serif;
     font-size: 18px;
     line-height: 1.4;
     color: hsl(0, 0%, 15%);
@@ -16,8 +19,6 @@ h1, h2, h3, h4, h5, h6 {
     color: black;
 }
 h3, h4, h5, h6 {
-    /* Reset inherited: html */
-    font-family: "Helvetica Neue", "Helvetica", sans-serif;
     font-weight: 500;
 }
 a {
