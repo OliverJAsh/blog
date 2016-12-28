@@ -11,7 +11,10 @@ html {
 }
 body {
     /* Reset composed: UA */
-    margin: 1rem;
+    /* Use margin for top and bottom gutter so we can exploit collapsing margins */
+    margin: 1rem auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
     max-width: 34rem;
 }
 h1, h2, h3, h4, h5, h6 {
