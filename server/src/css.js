@@ -47,4 +47,10 @@ img, iframe { max-width: 100%; }
     /* Reset inherited: html */
     font-family: "Helvetica Neue", "Helvetica", sans-serif;
 }
+
+svg {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    display: block;
+}
 `;
