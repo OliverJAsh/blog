@@ -19,15 +19,25 @@ export default () => {
             h('section', [
                 h('h2', `Experience`),
                 h('div.time-entry', [
-                    h('h3', `Software Engineer at the Guardian`),
+                    h('h3', `Software Engineer at Cubik`),
                     h('div', [
-                        h('time', `March 2013`),
+                        h('time', `May 2016`),
                         ` – `,
                         h('time', `Present`)
                     ])
                 ]),
+                h('p', [ `I currently work at a small startup aiming to build accessible, web based tools for data visualisation.`, ]),
+                h('p', [ `My work involves tools such as TypeScript, Immutable.js, Redux, RxJS, virtual DOM (React), and D3.`, ]),
+                h('div.time-entry', [
+                    h('h3', `Software Engineer at the Guardian`),
+                    h('div', [
+                        h('time', `March 2013`),
+                        ` – `,
+                        h('time', `May 2016`)
+                    ])
+                ]),
                 h('p', [
-                    `I work on the team behind `,
+                    `I worked on the team behind `,
                     h('strong', [
                         h('a', {
                             "attributes": {
@@ -35,20 +45,16 @@ export default () => {
                             }
                         }, `theguardian.com`)
                     ]),
-                    ` as a full-stack software engineer. During this time I have worked extensively to improve the `,
+                    ` as a full-stack software engineer. During this time I worked extensively to improve the `,
                     h('strong', `front-end performance`),
                     ` of the site. I also worked across various `,
                     h('strong', `objective focussed teams`),
                     ` to design, build, and `,
                     h('strong', `A/B test`),
-                    ` new features. My work has involved various new technologies, including Scala, Play, service workers (`,
-                    h('a', {
-                        "attributes": {
-                            "href": "https://www.theguardian.com/info/developer-blog/2015/nov/04/building-an-offline-page-for-theguardiancom",
-                            "title": "Read my blog post"
-                        }
-                    }, `used to build an offline page`),
-                    `), functional reactive programming (RxJS), and TypeScript.`
+                    ` new features. My work involved various new technologies, including Scala, Play, service workers, functional reactive programming (RxJS), and TypeScript.`,
+                    ' ',
+                    h('a', { href: 'https://www.youtube.com/watch?v=hx1fqAXXViA' }, 'See my talk at JSConf Budapest'),
+                    '.',
                 ]),
                 h('p', [
                     `Previously, I helped `,
@@ -67,7 +73,7 @@ export default () => {
                             "attributes": {
                                 "href": "https://www.youtube.com/watch?v=31EpyxcmBeU"
                             }
-                        }, `See my recorded talk at Front-end London`)
+                        }, `See my talk at Front-end London`)
                     ]),
                     `.`
                 ]),
@@ -148,7 +154,7 @@ export default () => {
                         h('time', `September 2012`)
                     ])
                 ]),
-                h('p', `I worked on creative web projects for clients, and took the role of lead front-end engineer for various projects including building a responsive newspaper web site.`),
+                h('p', `I worked on creative web projects for clients, and took the role of lead front-end engineer for various projects including building a responsive newspaper website.`),
                 h('div.time-entry', [
                     h('h3', `Teacher at EBP Children’s University, Bedford College`),
                     h('div', [

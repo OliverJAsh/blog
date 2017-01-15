@@ -84,15 +84,15 @@ const postJsonToPost = (postJson: PostJson): Post => (
 );
 
 const projects: Array<Project> = [
-    { title: 'a seed project for creating a blog using TypeScript', href: 'https://github.com/OliverJAsh/simple-typescript-blog' },
-    { title: 'a simple offline blog to demonstrate service worker capabitilies', href: 'https://github.com/OliverJAsh/simple-offline-blog' },
+    { title: 'Scribe, a web rich text editor, built for the Guardian\'s CMS', href: 'https://github.com/guardian/scribe' },
+    { title: 'Sbscribe, a social news and feed reader. ', href: 'https://vimeo.com/69376016' },
+    { title: 'the Guardian’s offline page', href: 'https://www.theguardian.com/info/developer-blog/2015/nov/04/building-an-offline-page-for-theguardiancom' },
     { title: 'Chrome extension for editing URL query parameters, written in Elm', href: 'https://github.com/OliverJAsh/query-params-chrome' },
     { title: 'Chrome extension for easily viewing and switching A/B tests on theguardian.com, written in Cycle.js', href: 'https://github.com/OliverJAsh/guardian-ab-tests-chrome' },
-    { title: 'a dashboard to easily view deploys of theguardian.com, written in TypeScript', href: 'https://github.com/guardian/frontend/tree/master/static/src/deploys-radiator' },
-    { title: 'the Guardian’s offline page', href: 'https://www.theguardian.com/info/developer-blog/2015/nov/04/building-an-offline-page-for-theguardiancom' },
+    { title: 'a seed project for creating a blog using TypeScript', href: 'https://github.com/OliverJAsh/simple-typescript-blog' },
+    { title: 'a simple offline blog to demonstrate service worker capabitilies', href: 'https://github.com/OliverJAsh/simple-offline-blog' },
+    { title: 'a dashboard to easily view deploys of theguardian.com, written in TypeScript', href: 'https://github.com/guardian/frontend/pull/11356' },
     { title: 'the Guardian’s developer site', href: 'http://developers.theguardian.com/' },
-    { title: 'Scribe, a web rich text editor', href: 'https://github.com/guardian/scribe' },
-    { title: 'Sbscribe, a social news and feed reader. ', href: 'https://vimeo.com/69376016' }
 ];
 
 const talks: Array<Talk> = [
