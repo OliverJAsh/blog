@@ -5,9 +5,9 @@ export default h('div', [
     h('p', [
         `I’m a software engineer residing in `,
         h('a', { href: midhurstLink }, 'Midhurst'),
-        `, the heart of the South Downs. With an umbilical cord to London, I
-        currently work on data visualisation tools, and previously worked on the
-        team behind `,
+        `, the heart of the South Downs. I currently work at `,
+        h('a', { href: 'https://unsplash.com/' }, 'Unsplash'),
+        `, and previously worked on the team behind `,
         h('a', { href: 'http://www.theguardian.com/' }, 'theguardian.com'),
         ` and the Guardian's web based content management system, `,
         h('a', { href: 'https://www.youtube.com/watch?v=31EpyxcmBeU' }, 'Composer'),
