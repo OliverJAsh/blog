@@ -119,7 +119,7 @@ siteRouter.use((req, res, next) => {
     }
 });
 
-siteRouter.get(homeRegExp, (req, res, next) => (
+siteRouter.get(homeRegExp, (_req, res, next) => (
     postsPromise
         .then(posts => (
             sortPostsByDateDesc(
@@ -156,7 +156,7 @@ siteRouter.get(postRegExp, (req, res, next) => {
         .catch(next);
 });
 
-siteRouter.get('/cv', (req, res) => (
+siteRouter.get('/cv', (_req, res) => (
     res
         .set('Cache-Control', 'public, max-age=60')
         .send(stringifyTree(cvView()))
@@ -169,7 +169,7 @@ siteRouter.get(new RegExp(postPrefixRegExp.source + /\.html$/.source), (req, res
 
 app.use(redirectTrailingSlashes);
 
-siteRouter.use((req, res) => {
+siteRouter.use((_req, res) => {
     const state = { statusCode: 404, message: http.STATUS_CODES[404] };
     const response = stringifyTree(errorView(state));
     res.status(404).send(response);
@@ -177,7 +177,7 @@ siteRouter.use((req, res) => {
 
 app.use('/', siteRouter);
 
-app.use((error: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
+app.use((error: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
     log(error.stack as string);
     res.sendStatus(500);
 });

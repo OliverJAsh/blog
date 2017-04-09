@@ -1,9 +1,6 @@
 import { h } from 'virtual-dom';
 import mainView from './main';
-import dateFormat = require('dateformat');
 import intro from '../fragments/intro';
-
-import { Post } from '../models';
 
 export default () => {
     const body = h('div', [

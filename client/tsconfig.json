@@ -6,7 +6,9 @@
         "allowJs": true,
         "noImplicitThis": true,
         "noImplicitReturns": true,
-        "strictNullChecks": true
+        "strictNullChecks": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true
     },
     "exclude": ["./target"]
 }

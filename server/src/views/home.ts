@@ -1,7 +1,6 @@
 import { h } from 'virtual-dom';
 import mainView from './main';
 import { groupBy, toPairs } from 'lodash';
-import dateFormat = require('dateformat');
 import intro from '../fragments/intro';
 
 import { PostPreview, Project, Talk } from '../models';
