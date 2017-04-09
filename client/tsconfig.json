@@ -1,14 +1,17 @@
 {
     "compilerOptions": {
-        "noImplicitAny": true,
+        "module": "commonjs",
         "target": "es5",
-        "outDir": "./target",
-        "allowJs": true,
-        "noImplicitThis": true,
-        "noImplicitReturns": true,
+        "noImplicitAny": true,
         "strictNullChecks": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
         "noUnusedLocals": true,
-        "noUnusedParameters": true
+        "noUnusedParameters": true,
+        "sourceMap": true,
+
+        "allowJs": true,
+        "outDir": "./target"
     },
     "exclude": ["./target"]
 }

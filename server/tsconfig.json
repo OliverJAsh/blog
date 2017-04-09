@@ -1,16 +1,17 @@
 {
     "compilerOptions": {
-        "noImplicitAny": true,
-        "target": "es5",
         "module": "commonjs",
-        "allowJs": true,
-        "outDir": "./target",
-        "sourceMap": true,
-        "noImplicitThis": true,
-        "noImplicitReturns": true,
+        "target": "es5",
+        "noImplicitAny": true,
         "strictNullChecks": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
         "noUnusedLocals": true,
-        "noUnusedParameters": true
+        "noUnusedParameters": true,
+        "sourceMap": true,
+
+        "allowJs": true,
+        "outDir": "./target"
     },
     "files": [
         "./typings/index.d.ts",
