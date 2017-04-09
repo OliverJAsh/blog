@@ -11,12 +11,14 @@
         "sourceMap": true,
 
         "allowJs": true,
-        "outDir": "./target"
+        "outDir": "./target",
+        "lib": [
+            "dom",
+            "es2015"
+        ]
     },
     "files": [
-        "./typings/index.d.ts",
-        // https://github.com/Microsoft/TypeScript/issues/3005
-        "./../node_modules/typescript/lib/lib.es6.d.ts",
+        "./manual-typings/main.d.ts",
         "./src/index.ts"
     ]
 }
