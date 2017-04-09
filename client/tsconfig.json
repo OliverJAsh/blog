@@ -3,7 +3,10 @@
         "noImplicitAny": true,
         "target": "es5",
         "outDir": "./target",
-        "allowJs": true
+        "allowJs": true,
+        "noImplicitThis": true,
+        "noImplicitReturns": true,
+        "strictNullChecks": true
     },
     "exclude": ["./target"]
 }

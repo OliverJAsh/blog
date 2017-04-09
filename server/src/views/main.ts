@@ -15,7 +15,7 @@ export default ({ title, description, body }: { title: string, description?: str
             h('meta', { charset: 'utf-8' }, []),
             h('title', `${title ? (title + ' – ') : ''}${siteTitle}`),
             h('meta', { name: 'viewport', content: 'width=device-width, initial-scale=1' }, []),
-            description ? h('meta', { name: 'description', content: description }, []) : null,
+            description ? h('meta', { name: 'description', content: description }, []) : null as any,
             h('style', { innerHTML: css }, [])
         ]),
         h('body', [
