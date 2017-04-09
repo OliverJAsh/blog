@@ -16,7 +16,20 @@ export default ({ title, description, body }: { title: string, description?: str
             h('title', `${title ? (title + ' – ') : ''}${siteTitle}`),
             h('meta', { name: 'viewport', content: 'width=device-width, initial-scale=1' }, []),
             description ? h('meta', { name: 'description', content: description }, []) : null as any,
-            h('style', { innerHTML: css }, [])
+            h('style', { innerHTML: css }, []),
+
+            h('link', {
+                attributes: {
+                    rel: 'preload',
+                    href: '/prism-theme.css',
+                    as: 'style',
+                    onload: 'this.rel="stylesheet"',
+                }
+            }, []),
+            h('noscript', [
+                h('link', { attributes: { rel: 'stylesheet', href: '/prism-theme.css' } }, [])
+            ]),
+
         ]),
         h('body', [
             h('h1', [

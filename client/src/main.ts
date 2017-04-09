@@ -1,1 +1,2 @@
-console.log('Hello, World!');
+import 'loadcss';
+import 'prismjs';
