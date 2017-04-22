@@ -4,7 +4,8 @@
     "node": "6.10.2"
   },
   "scripts": {
-    "start": "npm run compile && npm run runServer",
+    "prestart": "npm run compile",
+    "start": "npm run runServer",
     "compile": "npm run clean && npm run compileClient && cp -r client/target/* server/target/client && npm run compileServerTs && cp -r server/src/posts server/target",
     "clean": "rm -rf server/target && rm -rf client/target && mkdir -p server/target/client && mkdir -p client/target",
     "compileClient": "webpack && cp -r client/src/images client/target && cp ./node_modules/prismjs/themes/prism.css ./client/target/prism-theme.css",
