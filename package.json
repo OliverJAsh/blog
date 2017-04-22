@@ -1,5 +1,8 @@
 {
   "private": true,
+  "engines": {
+    "node": "6.10.2"
+  },
   "scripts": {
     "start": "npm run compile && npm run runServer",
     "compile": "npm run clean && npm run compileClient && cp -r client/target/* server/target/client && npm run compileServerTs && cp -r server/src/posts server/target",
