@@ -36,7 +36,5 @@
     "virtual-dom": "^2.1.1",
     "webpack": "^2.3.3"
   },
-  "devDependencies": {
-    "uglify-js": "^2.8.22"
-  }
+  "devDependencies": {}
 }
