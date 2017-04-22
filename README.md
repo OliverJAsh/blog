@@ -3,8 +3,8 @@
 ## Usage
 
 ```
-npm install
-npm start
+yarn
+yarn start
 ```
 
 ## Deploy
