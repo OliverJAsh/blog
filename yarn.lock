@@ -2108,9 +2108,9 @@ uglify-to-browserify@~1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/uglify-to-browserify/-/uglify-to-browserify-1.0.2.tgz#6e0924d6bda6b5afe349e39a6d632850a0f882b7"
 
-uglifyjs-webpack-plugin@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/uglifyjs-webpack-plugin/-/uglifyjs-webpack-plugin-0.4.1.tgz#7a3fb941ba43986ebf66fbec5accf04731f9f293"
+uglifyjs-webpack-plugin@^0.4.3:
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/uglifyjs-webpack-plugin/-/uglifyjs-webpack-plugin-0.4.3.tgz#a672a7d6655f94dfa7e09670d48030f37cc93267"
   dependencies:
     source-map "^0.5.6"
     webpack-sources "^0.2.3"

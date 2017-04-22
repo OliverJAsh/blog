@@ -31,12 +31,12 @@
     "slug": "^0.9.1",
     "ts-loader": "^2.0.3",
     "typescript": "2.2.2",
+    "uglifyjs-webpack-plugin": "^0.4.3",
     "vdom-to-html": "^2.1.1",
     "virtual-dom": "^2.1.1",
     "webpack": "^2.3.3"
   },
   "devDependencies": {
-    "uglify-js": "^2.8.22",
-    "uglifyjs-webpack-plugin": "^0.4.1"
+    "uglify-js": "^2.8.22"
   }
 }
