@@ -1,11 +1,8 @@
 import { h } from 'virtual-dom';
 
-const midhurstLink = 'https://www.google.co.uk/maps/place/Midhurst/@50.9817809,-0.7522787,15z/data=!3m1!4b1!4m5!3m4!1s0x4874353f6541d8ed:0xad2789872322f14d!8m2!3d50.9868979!4d-0.737274';
 export default h('div', [
     h('p', [
-        `I’m a software engineer residing in `,
-        h('a', { href: midhurstLink }, 'Midhurst'),
-        `, the heart of the South Downs. I currently work at `,
+        `I’m a software engineer residing in Yorkshire, England. I currently work at `,
         h('a', { href: 'https://unsplash.com/' }, 'Unsplash'),
         `, and previously worked on the team behind `,
         h('a', { href: 'http://www.theguardian.com/' }, 'theguardian.com'),
