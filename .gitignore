@@ -3,3 +3,4 @@
 /client/target/
 /npm-debug.log
 /log.txt
+/generated/

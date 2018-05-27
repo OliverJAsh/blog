@@ -1,7 +1,6 @@
-import * as http from 'http';
 import * as fs from 'fs';
-import * as express from 'express';
-import * as compression from 'compression';
+import * as pathHelpers from 'path';
+import * as mkdirP from 'mkdirp';
 import treeToHTML = require('vdom-to-html');
 import dateFormat = require('dateformat');
 import slug = require('slug');
@@ -10,16 +9,9 @@ import * as denodeify from 'denodeify';
 
 import postView from './views/post';
 import homeView from './views/home';
-import errorView from './views/error';
 import cvView from './views/cv';
 
-import redirectTrailingSlashes from './redirect-trailing-slashes';
-
 import { Post, PostJson, PostPreview, Talk, Project } from './models';
-
-const homeRegExp = /^\/$/;
-const postPrefixRegExp = /^\/(\d{4})\/(\d{2})\/(\d{2})\/([a-z0-9-]+)/;
-const postRegExp = new RegExp(postPrefixRegExp.source + /$/.source);
 
 const log = (message: string) => {
     console.log(`${new Date().toISOString()} ${message}`);
@@ -38,15 +30,7 @@ const loadPost = (fileName: string): Promise<PostJson> => loadJsonFile<PostJson>
 
 const readdir = denodeify(fs.readdir);
 const postsPromise: Promise<Array<PostJson>> = (
-    readdir(postsDir).then(fileNames => Promise.all(fileNames.map(loadPost)))
-);
-const postsMapPromise = postsPromise.then(posts => posts.reduce((acc, post) => {
-    acc.set(getPostSlug(post), post);
-    return acc;
-}, new Map<string, PostJson>()));
-
-const getPost = (year: string, month: string, date: string, title: string): Promise<PostJson> => (
-    postsMapPromise.then(postsMap => postsMap.get(`${year}/${month}/${date}/${title}`))
+    readdir(postsDir).then(((fileNames: string[]) => Promise.all(fileNames.map(loadPost))))
 );
 
 
@@ -54,23 +38,12 @@ const getPostSlug = (postJson: PostJson): string => (
     `${dateFormat(new Date(postJson.date), 'yyyy/mm/dd')}/${slug(postJson.title, { lower: true })}`
 );
 
-const app = express();
-app.enable('strict routing');
-
 // // Remember: order matters!
-
-app.use(compression());
-
-const secondsInAYear = 365 * 24 * 60 * 60;
-const publicDir = `${__dirname}/client`;
-app.use('/', express.static(publicDir, { maxAge: secondsInAYear * 1000 }));
 
 const sortPostsByDateDesc = (posts: Array<PostPreview>) => sortBy(posts, post => post.date).reverse();
 
 const docType = '<!DOCTYPE html>';
 const stringifyTree = (tree: VirtualDOM.VNode) => docType + treeToHTML(tree);
-
-const siteRouter = express.Router({ strict: app.get('strict routing') });
 
 const postJsonToPost = (postJson: PostJson): Post => (
     {
@@ -112,84 +85,38 @@ const externalPosts: Array<PostPreview> = [
 // Site
 //
 
-// We cache pages but we must ensure old assets are available
+const GENERATED_DIR = pathHelpers.join(__dirname, '..', '..', 'generated');
 
-siteRouter.use((req, res, next) => {
-    if (req.accepts('html')) {
-        next();
-    } else {
-        res.sendStatus(400);
-    }
-});
+postsPromise
+    .then(posts => (
+        sortPostsByDateDesc(
+            posts
+                .map(postJsonToPost)
+                .filter(post => (post.date.getFullYear() > 2013) || post.showcase)
+                .map((post): PostPreview => post)
+                .concat(externalPosts)
+        )
+    ))
+    .then(posts => {
+        const html = stringifyTree(homeView(projects, talks, posts));
+        fs.writeFileSync(pathHelpers.join(GENERATED_DIR, 'index.html'), html);
+    })
 
-siteRouter.get(homeRegExp, (_req, res, next) => (
-    postsPromise
-        .then(posts => (
-            sortPostsByDateDesc(
-                posts
-                    .map(postJsonToPost)
-                    .filter(post => (post.date.getFullYear() > 2013) || post.showcase)
-                    .map((post): PostPreview => post)
-                    .concat(externalPosts)
-            )
-        ))
-        .then(posts => {
-            const response = stringifyTree(homeView(projects, talks, posts));
-            res
-                .set('Cache-Control', 'public, max-age=60')
-                .send(response);
+postsPromise
+    .then(posts => {
+        posts.forEach(postJson => {
+            const post = postJsonToPost(postJson)
+            const html = stringifyTree(postView(post));
+            const path = `${getPostSlug(postJson)}.html`;
+            const fullPath = pathHelpers.join(GENERATED_DIR, path);
+            const fullPathDir = pathHelpers.dirname(fullPath);
+
+            mkdirP.sync(fullPathDir)
+            fs.writeFileSync(fullPath, html)
         })
-        .catch(next)
-));
+    });
 
-siteRouter.get(postRegExp, (req, res, next) => {
-    const { 0: year, 1: month, 2: date, 3: title } = req.params;
-    getPost(year, month, date, title)
-        .then(postJson => {
-            if (postJson) {
-                const post = postJsonToPost(postJson);
-                const response = stringifyTree(postView(post));
-                res
-                    .set('Cache-Control', 'public, max-age=60')
-                    .send(response);
-            } else {
-                next();
-            }
-        })
-        .catch(next);
-});
-
-siteRouter.get('/cv', (_req, res) => (
-    res
-        .set('Cache-Control', 'public, max-age=60')
-        .send(stringifyTree(cvView()))
-));
-
-siteRouter.get(new RegExp(postPrefixRegExp.source + /\.html$/.source), (req, res) => {
-    const newPath = req.path.replace(/\.html$/, '');
-    res.redirect(301, newPath);
-});
-
-app.use(redirectTrailingSlashes);
-
-siteRouter.use((_req, res) => {
-    const state = { statusCode: 404, message: http.STATUS_CODES[404] };
-    const response = stringifyTree(errorView(state));
-    res.status(404).send(response);
-});
-
-app.use('/', siteRouter);
-
-app.use((error: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
-    log(error.stack as string);
-    res.sendStatus(500);
-});
-
-const onListen = (server: http.Server) => {
-    const { port } = server.address();
-
-    log(`Server running on port ${port}`);
-};
-
-const httpServer = http.createServer(app);
-httpServer.listen(process.env.PORT || 8080, () => onListen(httpServer));
+(() => {
+    const html = stringifyTree(cvView())
+    fs.writeFileSync(pathHelpers.join(GENERATED_DIR, 'cv.html'), html);
+})();

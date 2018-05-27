@@ -18,3 +18,8 @@ declare module 'slug' {
 
     export = main;
 }
+
+declare module 'mkdirp' {
+    const Module: any
+    export = Module;
+}

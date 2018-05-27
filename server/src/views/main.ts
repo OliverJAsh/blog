@@ -2,8 +2,8 @@ import { h, VNode } from 'virtual-dom';
 import css from '../css';
 import * as fs from 'fs';
 
-const clientMainJs = fs.readFileSync(`${__dirname}/../client/main.js`).toString();
-const analyticsJs = fs.readFileSync(`${__dirname}/../client/analytics.js`).toString();
+const clientMainJs = fs.readFileSync(`${__dirname}/../../../client/target/main.js`).toString();
+const analyticsJs = fs.readFileSync(`${__dirname}/../../../client/target/analytics.js`).toString();
 
 const siteTitle = 'Oliver Joseph Ash';
 
