@@ -10,5 +10,5 @@ yarn start
 ## Deploy
 
 ```
-git push heroku master
+git push
 ```
