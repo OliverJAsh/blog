@@ -73,6 +73,7 @@ const talks: Array<Talk> = [
     { title: 'Building a CMS for the responsive web', href: 'https://www.youtube.com/watch?v=31EpyxcmBeU', description: 'In light of responsive web design, people often focus heavily on how content should be rendered, but how it is produced is usually overlooked. This talk reviews how the challenges of responsive web design can bleed into issues of content production, and how the Guardian solves these issues with Composer – our web-based, digital content-management system.' }
 ];
 const externalPosts: Array<PostPreview> = [
+    { title: 'Building the Unsplash Uploader', href: 'https://medium.com/unsplash/building-the-unsplash-uploader-880a5ba0d442', date: new Date(2018, 11, 22) },
     { title: 'Strongly-typed finite-state machines with Redux and TypeScript', href: 'https://medium.com/unsplash/strongly-typed-finite-state-machines-with-redux-and-typescript-3aac2b0332f5', date: new Date(2018, 8, 10) },
     { title: 'How we test responsive images at Unsplash', href: 'https://medium.com/unsplash/how-we-test-responsive-images-at-unsplash-4fb940caee72', date: new Date(2018, 5, 8) },
     { title: 'How we gradually migrated to TypeScript at Unsplash', href: 'https://medium.com/unsplash/how-we-gradually-migrated-to-typescript-at-unsplash-7a34caa24ef1', date: new Date(2018, 2, 14) },
