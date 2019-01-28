@@ -233,12 +233,6 @@ export default () => {
                                 h('a', { href: 'mailto:oliverjash@gmail.com' }, `oliverjash@gmail.com`)
                             ])
                         ]),
-                        h('dt', `Phone number`),
-                        h('dd', [
-                            h('span', [
-                                h('a', { href: 'tel:+447545968290' }, `+44 7545 968290`)
-                            ])
-                        ]),
                         h('dt', `Location`),
                         h('dd', [
                             h('address', `London, England`)
